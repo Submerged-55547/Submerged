@@ -177,7 +177,7 @@ class MotorPair:
     def left_motor_left_for(self, speed, yaw):
         run(self.__left_motor_left_for(speed, yaw))
     async def __left_motor_left_for(self, speed, yaw):
-        self.start_tank(-speed, 0) 
+        self.start_tank(-speed, 0)
         def func():
             current_yaw, _, _ = motion_sensor.tilt_angles()
             current_yaw/=10
@@ -233,7 +233,7 @@ class MotorPair:
         def color_sensor_is():
             if self.pair is not None:
                 return color_sensor.color(self.color_sensor) in color
-            raise ValueError("Color sensor not supplied when creating class")                
+            raise ValueError("Color sensor not supplied when creating class")
         await until(color_sensor_is)
         self.stop()
     def backward_to(self, color: list[int], left_speed=None, right_speed=None):
@@ -312,7 +312,28 @@ front_arm=Motor("F")
 move=MotorPair("A", "D", wheel_diameter_mm=55.25, color_sensor=port.C)
 async def main():
     ...
-    # Write your code after this line
+    front_arm.run_to_position(248, speed=100)
+    def grab_reef_segment_and_krill():
+        move.forward_for(7,"cm",100,100)
+        move.forward_to_red_border(100, 100)
+        move.forward_for(50, "cm", 100, 100)
+        move.backward_for(10, "cm", 100, 100)
+    def coral_reef():
+        move.left_motor_left_for(100, 26)
+        front_arm.run_for_degrees(159, 100)
+        move.forward_for(24, "cm", 100,100)
+        front_arm.run_for_degrees(20, 100)
+        front_arm.run_for_degrees(50, -100)
+    def shark():
+        move.backward_for(14, "cm", 100, 100)
+        front_arm.run_for_degrees(265, -100)
+        front_arm.run_for_degrees(50, 100)
+    def go_home():
+        move.backward_for(60, "cm", 650, 650)
+    grab_reef_segment_and_krill()
+    coral_reef()
+    shark()
+    go_home()
 if __name__ == '__main__':
         run(main())
         raise SystemExit
