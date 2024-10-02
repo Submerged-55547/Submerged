@@ -312,7 +312,7 @@ front_arm=Motor("F")
 move=MotorPair("A", "D", wheel_diameter_mm=55.25, color_sensor=port.C)
 async def main():
     ...
-    front_arm.run_to_position(113, speed=100)
+    front_arm.run_to_position(248, speed=100)
     def grab_reef_segment_and_krill():
         move.forward_for(7,"cm",100,100)
         move.forward_to_red_border(100, 100)
@@ -320,17 +320,16 @@ async def main():
         move.backward_for(10, "cm", 100, 100)
     def coral_reef():
         move.left_motor_left_for(100, 26)
-        front_arm.run_for_degrees(150, 100)
+        front_arm.run_for_degrees(159, 100)
         move.forward_for(24, "cm", 100,100)
-        front_arm.run_for_degrees(40, 100)
-        front_arm.run_for_degrees(80, -100)
+        front_arm.run_for_degrees(20, 100)
+        front_arm.run_for_degrees(50, -100)
     def shark():
-        move.backward_for(15, "cm", 100, 100)
-        front_arm.run_for_degrees(300, -100)
+        move.backward_for(14, "cm", 100, 100)
+        front_arm.run_for_degrees(265, -100)
         front_arm.run_for_degrees(50, 100)
     def go_home():
-        front_arm.run_for_degrees(100,100)
-        move.backward_for(70, "cm", 650, 650)
+        move.backward_for(60, "cm", 650, 650)
     grab_reef_segment_and_krill()
     coral_reef()
     shark()
