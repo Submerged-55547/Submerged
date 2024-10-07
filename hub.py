@@ -1,3 +1,7 @@
+WAVEFORM_SINE=0
+DEFAULT=0
+class Awaitable: # dummy
+    pass
 class button:
     def pressed(button: int) -> int:
         ...
