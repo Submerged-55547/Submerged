@@ -1,16 +1,13 @@
-import app
-import hub
-from motor import run as __spike3_run, stop as __spike3_stop, run_for_degrees as __spike3_run_for_degrees, READY as __spike3_READY, RUNNING as __spike3_RUNNING, STALLED as __spike3_STALLED, CANCELLED as __spike3_CANCELED, ERROR as __spike3_ERROR, run_for_time as __spike3_run_for_time, SHORTEST_PATH as __spike3_SHORTEST_PATH, CLOCKWISE as __spike3_CLOCKWISE, COUNTERCLOCKWISE as __spike3_COUNTERCLOCKWISE, run_to_absolute_position as __spike3_run_to_absolute_position, DISCONNECTED as __spike3_DISCONNECTED
+from motor import run as __spike3_run, stop as __spike3_stop, run_for_degrees as __spike3_run_for_degrees, run_for_time as __spike3_run_for_time, SHORTEST_PATH as __spike3_SHORTEST_PATH, CLOCKWISE as __spike3_CLOCKWISE, COUNTERCLOCKWISE as __spike3_COUNTERCLOCKWISE, run_to_absolute_position as __spike3_run_to_absolute_position, DISCONNECTED as __spike3_DISCONNECTED
 import motor_pair as __motor_pair
 from color_sensor import color as __spike3_color, reflection as __spike3_reflection
 import distance_sensor
+from color import AZURE, BLUE, RED
 import force_sensor
-from hub import port, light_matrix, button, motion_sensor, button
-from time import time
+from hub import port, light_matrix, button, motion_sensor
 from runloop import run, sleep_ms, until
 from math import pi
 from app import sound
-from color import *
 import color_sensor
 
 class Motor:
@@ -51,7 +48,7 @@ class Motor:
         __spike3_stop(self.port)
 
     def run_to_position(self, degrees: int, direction='shortest path', speed: int|None = None):
-        '''
+      """
     Runs the motor to an absolute position.
 
     The motor will always travel in the direction specified by the 'direction' parameter.
@@ -88,8 +85,8 @@ class Motor:
     --------
     motor = Motor('A')
     motor.run_to_position(90, 'clockwise', speed=75)
-    '''
-        run(self.__run_to_position(degrees, direction, self.default_speed if speed is None else speed))
+    """
+      run(self.__run_to_position(degrees, direction, self.default_speed if speed is None else speed))
 
     async def __run_to_position(self, degrees, direction, speed):
         if not isinstance(degrees, int):
@@ -114,6 +111,8 @@ class Motor:
 
 class MotorPair:
     def __init__(self, left_port, right_port, wheel_diameter_mm=None, one_motor_rotation_in_cm=None, color_sensor=None):
+        # this is intended 
+        # trunk-ignore(bandit/B101)
         assert (not ((wheel_diameter_mm is None) ^ bool(one_motor_rotation_in_cm is None))) |(wheel_diameter_mm is None) ^ bool(one_motor_rotation_in_cm is None), 'either wheel_diameter_mm or one_motor_rotation_in_cm must be specified'
         if wheel_diameter_mm:
             self.set_wheel_diameter(wheel_diameter_mm)
@@ -312,28 +311,24 @@ front_arm=Motor("F")
 move=MotorPair("A", "D", wheel_diameter_mm=55.25, color_sensor=port.C)
 async def main():
     ...
-    front_arm.run_to_position(248, speed=100)
-    def grab_reef_segment_and_krill():
-        move.forward_for(7,"cm",100,100)
-        move.forward_to_red_border(100, 100)
-        move.forward_for(50, "cm", 100, 100)
-        move.backward_for(10, "cm", 100, 100)
-    def coral_reef():
-        move.left_motor_left_for(100, 26)
-        front_arm.run_for_degrees(159, 100)
-        move.forward_for(24, "cm", 100,100)
-        front_arm.run_for_degrees(20, 100)
-        front_arm.run_for_degrees(50, -100)
-    def shark():
-        move.backward_for(14, "cm", 100, 100)
-        front_arm.run_for_degrees(265, -100)
-        front_arm.run_for_degrees(50, 100)
-    def go_home():
-        move.backward_for(60, "cm", 650, 650)
-    grab_reef_segment_and_krill()
-    coral_reef()
-    shark()
-    go_home()
+    front_arm.run_to_position(289, speed=100)
+    move.forward_for(7,"cm",100,100)
+    move.forward_to_red_border(100, 100)
+    move.forward_for(50, "cm", 100, 100)
+    move.backward_for(10, "cm", 100, 100)
+    move.left_motor_left_for(100, 26)
+    front_arm.run_for_degrees(159, 100)
+    move.forward_for(24, "cm", 100,100)
+    front_arm.run_for_degrees(20, 100)
+    front_arm.run_for_degrees(50, -100)
+    breakpoint(button.LEFT)
+    move.backward_for(14, "cm", 100, 100)
+    breakpoint(button.LEFT)
+    front_arm.run_for_degrees(265, -100)
+    breakpoint(button.LEFT)
+    front_arm.run_for_degrees(100, 200)
+    breakpoint(button.LEFT)
+    move.backward_for(65, "cm", 650, 650)
 if __name__ == '__main__':
-        run(main())
-        raise SystemExit
+    run(main())
+    raise SystemExit
