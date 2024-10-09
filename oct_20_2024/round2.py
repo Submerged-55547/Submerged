@@ -1,5 +1,4 @@
-import hub
-from motor import run as __spike3_run, stop as __spike3_stop, run_for_degrees as __spike3_run_for_degrees, run_for_time as __spike3_run_for_time, SHORTEST_PATH as __spike3_SHORTEST_PATH, CLOCKWISE as __spike3_CLOCKWISE, COUNTERCLOCKWISE as __spike3_COUNTERCLOCKWISE, run_to_absolute_position as __spike3_run_to_absolute_position, DISCONNECTED as __spike3_DISCONNECTED
+from motor import run as __spike3_run, stop as __spike3_stop,run_for_time as __spike3_run_for_time, SHORTEST_PATH as __spike3_SHORTEST_PATH, CLOCKWISE as __spike3_CLOCKWISE, COUNTERCLOCKWISE as __spike3_COUNTERCLOCKWISE, run_to_absolute_position as __spike3_run_to_absolute_position, DISCONNECTED as __spike3_DISCONNECTED, run_for_degrees as __spike3_run_for_degrees
 import motor
 import motor_pair as __motor_pair
 from color_sensor import color as __spike3_color, reflection as __spike3_reflection
@@ -9,8 +8,8 @@ from hub import port, light_matrix, button, motion_sensor
 from runloop import run, sleep_ms, until
 from math import pi
 from app import sound
+from color import RED, BLUE, AZURE
 import color_sensor
-from color import BLUE, AZURE, RED
 
 class Motor:
     def __init__(self, port_letter: str):
@@ -313,39 +312,36 @@ front_arm=Motor("F")
 move=MotorPair("A", "D", wheel_diameter_mm=55.25, color_sensor=port.C)
 back_arm=Motor("E")
 async def main():
-    ...
-    async def init():
-        hub.light_matrix.show_image(1)
-        run(motor.run_to_absolute_position(port.E, 200, 100, stop=motor.HOLD))
-        hub.light_matrix.show_image(2)
-        breakpoint(button.RIGHT)
-        run(motor.run_to_absolute_position(port.E, 36, 100, stop=motor.HOLD))
-    def scuba():
-        #all the way front
-        move.backward_for(50, "cm", 100,100)
-        #position for scuba
-        move.right_motor_left_for(100, 56)
-        #first ram in
-        move.backward_for(12 ,"cm", 50,50)
-        sleep_ms(500)
-        #get the guy
-        back_arm.run_for_degrees(90, 50)
-    def ensure_coral_reef():
-        # second ram in
-        move.backward_for(20,"cm",100,100)
-    def drop_scuba():
-        move.forward_for(5, "cm", 100, 100)
-        move.left_motor_right_for(100, -24)
-        back_arm.run_for_degrees(60, -50)
-        move.backward_for(27, "cm", 100, 100)
-        back_arm.run_for_degrees(30,-50)
-        move.forward_for(10,"cm", 100, 100)
-    def go_home():
-        move.forward(650, 650)
-    init()
-    scuba()
-    ensure_coral_reef()
-    drop_scuba()
-    go_home()
+    await motor.run_to_absolute_position(port.E, 200, 100, stop=motor.HOLD)
+    breakpoint(button.RIGHT)
+    await motor.run_to_absolute_position(port.E, 62, 100, stop=motor.HOLD)
+    #all the way front
+    move.backward_for(60, "cm", 100,100)
+    #turn for coral
+    move.right_motor_left_for(100,23)
+    #get coral
+    move.forward_for(20,"cm",100,100)
+    #position for scuba
+    move.right_motor_left_for(100, 53)
+    #first ram in
+    move.backward_for(20 ,"cm", 25,25)
+    sleep_ms(500)
+    #get the guy
+    back_arm.run_for_degrees(90, 50)
+    move.forward_for(4, "cm", 100, 100)
+    # second ram in
+    move.forward_for(10, "cm", 50, 50)
+    move.backward_for(22,"cm",50,50)
+    move.forward_for(5, "cm", 100, 100)
+    move.left_motor_right_for(100, -22)
+    back_arm.run_for_degrees(60, -50)
+    move.backward_for(10, "cm", 100, 100)
+    #move.left_motor_left_for(100, -22)
+    #breakpoint(button.LEFT)
+    move.backward_for(17, "cm", 100, 100)
+    # drop guy
+    back_arm.run_for_degrees(35,-50)
+    move.forward_for(10,"cm", 25, 25)
+    move.forward_for(50, "cm", 650, 650)
 if __name__ == '__main__':
     run(main())
