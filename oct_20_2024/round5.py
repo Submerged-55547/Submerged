@@ -309,16 +309,15 @@ def breakpoint(button):
 MotionSensor().reset_yaw(0)
 front_arm=Motor("F")
 move=MotorPair("A", "D", wheel_diameter_mm=55.25, color_sensor=port.C)
-back_arm=Motor("E")
 async def main():
-    back_arm.run_to_position(125, speed=100)
-    move.forward_to_red_border(-100, -100)
-    move.backward_for(68, "cm", 50, 50)
-    move.forward_for(25, "cm", 50, 50)
-    move.left_motor_right_for(100, -20)
-    move.backward_for(35, "cm", 50, 50)
-    move.left_motor_right_for(100, -33)
-    move.backward_for(150, "cm", 50, 50)
+    async def whale():
+        move.backward_for(26,"cm",100,100)
+        move.forward_to_blue_border(-100,-100)
+        move.backward_for(43,"cm",100,100)
+        move.left_motor_right_for(100,-45)
+        move.backward_for(18, "cm", 100,100)
+        back_arm.run_for_degrees(100, -40)
+    await whale()
 if __name__ == '__main__':
     run(main())
     raise SystemExit
