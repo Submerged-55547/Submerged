@@ -48,45 +48,45 @@ class Motor:
         __spike3_stop(self.port)
 
     def run_to_position(self, degrees: int, direction='shortest path', speed: int|None = None):
-      """
-    Runs the motor to an absolute position.
+        """
+        Runs the motor to an absolute position.
 
-    The motor will always travel in the direction specified by the 'direction' parameter.
-    If the sign of the speed is positive, it will go in the same direction at that speed. Otherwise, it will go in the different direction at the opposite sign speed.
-    If the speed is greater than 650, it will be limited to 650.
+        The motor will always travel in the direction specified by the 'direction' parameter.
+        If the sign of the speed is positive, it will go in the same direction at that speed. Otherwise, it will go in the different direction at the opposite sign speed.
+        If the speed is greater than 650, it will be limited to 650.
 
-    Parameters:
-    ----------
-    degrees : int
-        The target position for the motor. Must be an integer in the range of 0 to 359 (inclusive).
+        Parameters:
+        ----------
+        degrees : int
+            The target position for the motor. Must be an integer in the range of 0 to 359 (inclusive).
 
-    direction : str
-        The direction to use to reach the target position. Must be one of the following:
-        - 'shortest path': The motor will choose the shortest route to the target position.
-        - 'clockwise': The motor will run clockwise until it reaches the target position.
-        - 'counterclockwise': The motor will run counterclockwise until it reaches the target position.
+        direction : str
+            The direction to use to reach the target position. Must be one of the following:
+            - 'shortest path': The motor will choose the shortest route to the target position.
+            - 'clockwise': The motor will run clockwise until it reaches the target position.
+            - 'counterclockwise': The motor will run counterclockwise until it reaches the target position.
 
-    speed : int, optional
-        The motor’s speed as a velocity (0 to 650). If no value is specified, it will use the default speed
-        set by `set_default_speed()`.
+        speed : int, optional
+            The motor’s speed as a velocity (0 to 650). If no value is specified, it will use the default speed
+            set by `set_default_speed()`.
 
-    Raises:
-    -------
-    TypeError
-        If degrees or speed is not an integer, or if direction is not a string.
+        Raises:
+        -------
+        TypeError
+            If degrees or speed is not an integer, or if direction is not a string.
 
-    ValueError
-        If direction is not one of the allowed values or if degrees is not within the range of 0-359 (inclusive).
+        ValueError
+            If direction is not one of the allowed values or if degrees is not within the range of 0-359 (inclusive).
 
-    RuntimeError
-        If the motor has been disconnected from the port.
+        RuntimeError
+            If the motor has been disconnected from the port.
 
-    Example:
-    --------
-    motor = Motor('A')
-    motor.run_to_position(90, 'clockwise', speed=75)
-    """
-      run(self.__run_to_position(degrees, direction, self.default_speed if speed is None else speed))
+        Example:
+        --------
+        motor = Motor('A')
+        motor.run_to_position(90, 'clockwise', speed=75)
+        """
+        run(self.__run_to_position(degrees, direction, self.default_speed if speed is None else speed))
 
     async def __run_to_position(self, degrees, direction, speed):
         if not isinstance(degrees, int):
@@ -111,7 +111,7 @@ class Motor:
 
 class MotorPair:
     def __init__(self, left_port, right_port, wheel_diameter_mm=None, one_motor_rotation_in_cm=None, color_sensor=None):
-        # this is intended 
+        # this is intended
         # trunk-ignore(bandit/B101)
         assert (not ((wheel_diameter_mm is None) ^ bool(one_motor_rotation_in_cm is None))) |(wheel_diameter_mm is None) ^ bool(one_motor_rotation_in_cm is None), 'either wheel_diameter_mm or one_motor_rotation_in_cm must be specified'
         if wheel_diameter_mm:
