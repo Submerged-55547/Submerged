@@ -14,6 +14,7 @@ from app import sound
 from color import *
 import color_sensor
 import random
+import utime
 
 class Motor:
     def __init__(self, port_letter: str):
@@ -136,24 +137,9 @@ class MotorPair:
     def set_right_speed(self, right_speed):
         self.right_speed=right_speed
     async def __move_tank(self, amount, unit, left_speed=None, right_speed=None):
-        if left_speed is None:
-            left_speed = self.left_speed
-        if right_speed is None:
-            right_speed = self.right_speed
-        if unit == 'cm':
-            amount = self.__cm_to_degrees(amount, self.wheel_diameter_mm)# Convert cm to degrees
-        elif unit == 'degrees':
-            pass# Already in degrees, no conversion needed
-        elif unit == 'in':
-            amount = self.__cm_to_degrees(self.__in_to_cm(amount), self.wheel_diameter_mm)# Convert inches to cm then to degrees
-        elif unit == 'rotations':
-            amount *= 360# Convert rotations to degrees
-        elif unit == 'seconds':
-            # Handle seconds separately for timed movement
-            await __motor_pair.move_tank_for_time(self.pair, left_speed * 11, right_speed * 11, amount * 1000)
-            return# Exit the function after handling time
-        else:
-            raise ValueError("Unit must be 'cm', 'degrees', 'in', 'rotations', or 'seconds'.")
+        amount = self.__cm_to_degrees(amount, self.wheel_diameter_mm)# Convert cm to degrees
+        print("move tank")
+        print(amount)
         await __motor_pair.move_tank_for_degrees(self.pair, amount, left_speed*11, right_speed*11)
     def start_tank(self, left_speed, right_speed):
         __motor_pair.move_tank(self.pair, left_speed, right_speed)
@@ -313,7 +299,6 @@ MotionSensor().reset_yaw(0)
 front_arm=Motor("F")
 move=MotorPair("A", "D", wheel_diameter_mm=55.25, color_sensor=port.C)
 back_arm=Motor("E")
-print("\n" * 100)
 async def main():
     ...
     async def init():
@@ -321,56 +306,83 @@ async def main():
         #run(motor.run_to_absolute_position(port.E, 200, 100, stop=motor.HOLD))
         #hub.light_matrix.show_image(2)
         run(motor.run_to_absolute_position(port.F, 100, 50, direction=motor.SHORTEST_PATH, stop=motor.HOLD))
-        run(motor.run_to_absolute_position(port.E, 55, 100, direction=motor.SHORTEST_PATH, stop=motor.HOLD))
+        run(motor.run_to_absolute_position(port.E, 80, 650, direction=motor.SHORTEST_PATH, stop=motor.HOLD))
+        run(motor.run_to_absolute_position(port.E, 62, 20, direction=motor.SHORTEST_PATH, stop=motor.HOLD))
+        #print("E pos",motor.absolute_position(port.E))
+
     def scuba():
         #all the way front
 #        move.forward_for(59, "cm", 100,100)
-        move.backward_for(22,"cm",650,650)
+        #print("calling 315")
+        run(__motor_pair.move_tank_for_degrees(__motor_pair.PAIR_1, 456,-7150,-7150))#move.backward_for(22,"cm",650,650)
         move.forward_to([RED],-100,-100)
-        move.backward_for(23.5,"cm",650,650)
+        #print("calling 318")
+
+        run(__motor_pair.move_tank_for_degrees(__motor_pair.PAIR_1, 487,-7150,-7150))#move.backward_for(23.5,"cm",650,650)
         hub.light.color(hub.light.POWER,RED)
 
 
         #position for scuba
-        move.right_motor_left_for(650, 30)
-        move.right_motor_left_for(300, 35)
+        move.right_motor_left_for(650, 38)
         move.right_motor_left_for(50, 58)                                                               
-        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!get guy first",MotionSensor.get_yaw(),"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        #print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!get guy first",MotionSensor.get_yaw(),"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
         #first ram in
-        sleep_ms(500)
-        move.backward_for(12 ,"cm", 10,10)
-        sleep_ms(500)
-        global get_guy
-        get_guy=MotionSensor.get_yaw()
-        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!get guy",MotionSensor.get_yaw(),"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        sleep_ms(50)
+        #print("calling 330")
+
+        run(__motor_pair.move_tank_for_degrees(__motor_pair.PAIR_1, 290,-110,-110))
+        #move.backward_for(14,"cm", 10,10)
+        sleep_ms(50)
+        #global get_guy
+        #get_guy=MotionSensor.get_yaw()
+        #print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!get guy",MotionSensor.get_yaw(),"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         #get the guy
-        run(motor.run_for_degrees(port.E, 40, 50, stop=motor.HOLD))
-        sleep_ms(1000)
-        move.forward_for(2 ,"cm", 10,10)
+        run(motor.run_for_degrees(port.E, 40, 20, stop=motor.HOLD))
+        sleep_ms(100)
+        #print("calling 339")
+
+        
+        run(__motor_pair.move_tank_for_degrees(__motor_pair.PAIR_1, 41,110,110))#move.forward_for(2 ,"cm", 10,10)
         run(motor.run_for_degrees(port.E, 100, 50, stop=motor.HOLD))
     def ensure_coral_reef():
         # second ram in
-        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!get guy",MotionSensor.get_yaw(),"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        move.backward_for(10,"cm",200,200)
-    def go_home():
-        move.forward_for(10, "cm",650, 650)
-        move.left_motor_left_for(650, 90)
-        move.left_motor_left_for(100, 120)
-        move.left_motor_left_for(50, 136)
+        #print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!get guy",MotionSensor.get_yaw(),"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        #print("calling 346")
 
-        move.backward_for(22, "cm", 650, 650)
-        move.left_motor_left_for(100, 160)
+        run(__motor_pair.move_tank_for_degrees(__motor_pair.PAIR_1, 207,-2200,-2200))#move.backward_for(10,"cm",200,200)
+    def go_home():
+        
+        run(__motor_pair.move_tank_for_degrees(__motor_pair.PAIR_1, 207,7150,7150))#move.forward_for(10, "cm",650, 650)
+        move.left_motor_left_for(650, 110)
+        move.left_motor_left_for(300, 136)
+        #move.left_motor_left_for(50, 136)
+
+        #print("calling 355")
+
+        
+        run(__motor_pair.move_tank_for_degrees(__motor_pair.PAIR_1, 456,-7150,-7150))#move.backward_for(22, "cm", 650, 650)
+        move.left_motor_left_for(300, 160)
         print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!grab",MotionSensor.get_yaw(),"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
-        print(get_guy, MotionSensor.get_yaw(), sep=",")
-        run(motor.run_to_absolute_position(port.F, 20, 100, stop=motor.HOLD))
-        run(motor.run_to_absolute_position(port.F, 330, 50, stop=motor.HOLD))
-        move.backward_for(35, "cm", 650, 650)
+        #print(get_guy, MotionSensor.get_yaw(), sep=",")
+        run(motor.run_to_absolute_position(port.F, 20, 650, stop=motor.HOLD))
+        run(motor.run_to_absolute_position(port.F, 330, 150, stop=motor.HOLD))
+        #print("calling 364")
+
+        
+        run(__motor_pair.move_tank_for_degrees(__motor_pair.PAIR_1, 725,-7150,-7150))#move.backward_for(35, "cm", 650, 650)
+    
+    start_time = utime.ticks_us()
     hub.light.color(hub.light.POWER,YELLOW)
     await init()
     scuba()
     ensure_coral_reef()
     go_home()
+    end_time = utime.ticks_us()
+    # Calculate elapsed time for this iteration
+    elapsed_time = utime.ticks_diff(end_time, start_time)
+
+    print("Average execution time: {} milliseconds".format(elapsed_time/1000))
 if __name__ == '__main__':
     run(main())

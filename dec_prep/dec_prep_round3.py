@@ -1,4 +1,23 @@
+import sys
+import gc
+import motor
+from hub import port
+
+import utime
+def settrace(func):
+    def wrapper(*args, **kwargs):
+        print("Tracing", func.__name__, "with args=", args, ", kwargs=", kwargs)
+        start_time = utime.time()
+        result = func(*args, **kwargs)# Call the wrapped function
+        end_time = utime.time()
+        duration = end_time - start_time
+        print(func.__name__," executed in ", duration, " seconds")
+        return result
+    return wrapper
+class MpdbQuit(Exception):
+    pass
 import app
+import utime
 import asyncio
 import hub
 from motor import run as __spike3_run, stop as __spike3_stop, run_for_degrees as __spike3_run_for_degrees, READY as __spike3_READY, RUNNING as __spike3_RUNNING, STALLED as __spike3_STALLED, CANCELLED as __spike3_CANCELED, ERROR as __spike3_ERROR, run_for_time as __spike3_run_for_time, SHORTEST_PATH as __spike3_SHORTEST_PATH, CLOCKWISE as __spike3_CLOCKWISE, COUNTERCLOCKWISE as __spike3_COUNTERCLOCKWISE, run_to_absolute_position as __spike3_run_to_absolute_position, DISCONNECTED as __spike3_DISCONNECTED
@@ -320,55 +339,90 @@ front_arm=Motor("F")
 move=MotorPair("A", "D", wheel_diameter_mm=55.25, color_sensor=port.C)
 back_arm=Motor("E")
 unforce_breakpoint()
+async def _main():
+    await main()
+@settrace
 async def main():
     ...
     # Write your code after this line
+    @settrace
     def init():
-        back_arm.run_to_position(200, speed=100)
+        # back_arm.run_to_position(200, speed=100) initial
         front_arm.run_to_position(209, speed=100)
+        back_arm.run_to_position(240,speed=100)
+    @settrace
     def coral_reef():
+        @settrace
         def move_(): # Naming conflicts
             move.forward_to_red_border(300, 300)
             move.forward_for(52, "cm", 100, 100)
+            front_arm.run_to_position(196, speed=50)    
             breakpoint(button.LEFT)
-            front_arm.run_to_position(196, speed=50)
-            force_breakpoint()
+            if MotionSensor.get_yaw() > 4:
+                print("IF")
+                move.right_motor_left_for(15, -0.5)
+            move.forward_for(16, "cm", 100, 100)
             breakpoint(button.LEFT)
-            unforce_breakpoint()
-            move.forward_for(15, "cm", 100, 100)
-            breakpoint(button.LEFT)
+        @settrace                 
         def deliver_and_hit_coral():
             print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",MotionSensor.get_yaw(),"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             # Waits 3000 ms before stopping front arm.
-            async def time_3000_ms():
-                await asyncio.sleep_ms(3000)
-                front_arm.stop()
-            motor.run_to_absolute_position(port.F, 300, 100)
-            asyncio.run(time_3000_ms())
+            start_time=utime.ticks_ms()
+            def arm_is_down():
+                if (motor.absolute_position(port.F) >= 250):
+                    return True
+            
+            motor.run(port.F, 100)
+            run(until(arm_is_down, timeout=1000))
+            sleep_ms(300)
+            print(motor.absolute_position(port.F))
+
             breakpoint(button.LEFT)
+            #motor.run_to_absolute_position(port.F, 300, 100)
+            #asyncio.run(time_3000_ms())
             front_arm.run_to_position(210, speed=100)
-            breakpoint(button.LEFT)
+        @settrace
         def exit():    
-            move.backward_for(12, "cm", 100, 100)
+            move.backward_for(18, "cm", 100, 100)
         move_() # Naming conflicts
         deliver_and_hit_coral()
         exit()
 
+    @settrace
     def shark():
+        @settrace
         def move_(): # naming conflicts
-            move.forward_for(3, "cm", 100, 100)
+            move.right_motor_left_for(650, 5)
+            move.forward_for(10, "cm", 100, 100)
+        @settrace
         def hit_shark():
             front_arm.run_to_position(290, direction='counterclockwise', speed=100)
-            breakpoint(button.LEFT)
-            unforce_breakpoint()
             front_arm.run_to_position(75, speed=200)
-            move.right_motor_right_for(650, 0)
-            move.backward_for(70, "cm", 650, 650)
+            move.right_motor_right_for(650, -10)
+            move.backward_for(32, "cm", 650, 650)
+            force_breakpoint()
+            breakpoint(button.LEFT)
+            move.right_motor_right_for(100, -92)
+
+            move.backward_for(20, "cm", 100, 100)
+            breakpoint(button.LEFT)
+            motor.run_for_degrees(port.A,100,-100)
+            breakpoint(button.LEFT)
+            move.right_motor_right_for(100, -175)
+            move.backward_for(10, "cm", 100, 100)
+
+            back_arm.run_to_position(100, speed=50)
+
         move_() # naming conflicts
         hit_shark()
     init()
     coral_reef()
     shark()
+    #move.right_motor_right_for(100, -92)
+    #move.backward_for(5, "cm", 100, 100)
+    #move.right_motor_right_for(100, 179)
+
+
 if __name__ == '__main__':
-        run(main())
-        raise SystemExit
+        run(_main())
+        while True: ...

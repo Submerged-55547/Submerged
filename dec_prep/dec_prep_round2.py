@@ -315,7 +315,6 @@ async def main():
     ...
     # Write your code after this line
     back_arm.run_to_position(225, speed=-100)
-    breakpoint(button.LEFT)
     move.backward_for(31 , "cm", 50, 50)
     if (MotionSensor.get_yaw()>0):
         move.left_motor_right_for(10,0)

@@ -16,4 +16,4 @@ git diff --cached --name-only|grep llsp3| cut -d " " -f2|xargs ./llsp_to_py.sh
 echo "Converted"
 git diff --cached --name-only|grep llsp3| cut -d " " -f2|sed "s/.llsp3/.py/g"|xargs git add
 echo "Added"
-
+rm .files
