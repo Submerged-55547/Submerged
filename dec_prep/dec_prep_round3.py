@@ -2,16 +2,12 @@ import sys
 import gc
 import motor
 from hub import port
+#from typing import _get_type_hints_obj_allowed_types
 
 import utime
 def settrace(func):
     def wrapper(*args, **kwargs):
-        print("Tracing", func.__name__, "with args=", args, ", kwargs=", kwargs)
-        start_time = utime.time()
-        result = func(*args, **kwargs)# Call the wrapped function
-        end_time = utime.time()
-        duration = end_time - start_time
-        print(func.__name__," executed in ", duration, " seconds")
+        result = func(*args, **kwargs)
         return result
     return wrapper
 class MpdbQuit(Exception):
@@ -27,7 +23,7 @@ from color_sensor import color as __spike3_color, reflection as __spike3_reflect
 import distance_sensor
 import force_sensor
 from hub import port, light_matrix, button, motion_sensor, button
-from time import time
+from time import sleep, time
 from runloop import run, sleep_ms, until
 from math import pi
 from app import sound
@@ -308,6 +304,7 @@ class PrimeHub:
 class MotionSensor:
     @staticmethod
     def get_yaw():
+        sleep_ms(10)
         yaw, _, _=motion_sensor.tilt_angles()
         yaw=(-yaw)/10
         return yaw
@@ -345,45 +342,63 @@ async def _main():
 async def main():
     ...
     # Write your code after this line
+    #move.backward_for(20, "cm", 100, 100)
+    #while True: ...
     @settrace
     def init():
         # back_arm.run_to_position(200, speed=100) initial
-        front_arm.run_to_position(209, speed=100)
-        back_arm.run_to_position(240,speed=100)
+        back_arm.run_to_position(260,speed=100)
+        front_arm.run_to_position(209, speed=20)
     @settrace
     def coral_reef():
         @settrace
         def move_(): # Naming conflicts
+            sleep_ms(100)
             move.forward_to_red_border(300, 300)
+            #breakpoint(button.LEFT)
             move.forward_for(52, "cm", 100, 100)
-            front_arm.run_to_position(196, speed=50)    
+            #breakpoint(button.LEFT)
+            front_arm.run_to_position(194, speed=20)    
+            sleep_ms(100)
+            #breakpoint(button.LEFT)
+            print(MotionSensor.get_yaw(),"B!")
             breakpoint(button.LEFT)
-            if MotionSensor.get_yaw() > 4:
+            if MotionSensor.get_yaw() > -2:
                 print("IF")
-                move.right_motor_left_for(15, -0.5)
-            move.forward_for(16, "cm", 100, 100)
+                front_arm.run_to_position(196, speed=100)
+                force_breakpoint()
+                breakpoint(button.LEFT)
+                unforce_breakpoint()
+            else:
+                hub.light.color(hub.light.CONNECT, RED)
+            #elif MotionSensor.get_yaw() < -3:
+            #    move.right_motor_left_for(15, -2)
+    
+            print(MotionSensor.get_yaw(),"A!")
+            move.forward_for(18, "cm", 100, 100)
+            force_breakpoint()
             breakpoint(button.LEFT)
         @settrace                 
         def deliver_and_hit_coral():
-            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",MotionSensor.get_yaw(),"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            print(MotionSensor.get_yaw(),"A2!")
             # Waits 3000 ms before stopping front arm.
             start_time=utime.ticks_ms()
             def arm_is_down():
                 if (motor.absolute_position(port.F) >= 250):
                     return True
             
-            motor.run(port.F, 100)
+            motor.run(port.F, 30)
             run(until(arm_is_down, timeout=1000))
             sleep_ms(300)
             print(motor.absolute_position(port.F))
-
+            force_breakpoint()
             breakpoint(button.LEFT)
             #motor.run_to_absolute_position(port.F, 300, 100)
             #asyncio.run(time_3000_ms())
-            front_arm.run_to_position(210, speed=100)
+            front_arm.run_to_position(200, speed=100)
         @settrace
         def exit():    
-            move.backward_for(18, "cm", 100, 100)
+            move.backward_for(18, "cm", 50, 50)
         move_() # Naming conflicts
         deliver_and_hit_coral()
         exit()
@@ -392,8 +407,11 @@ async def main():
     def shark():
         @settrace
         def move_(): # naming conflicts
+            front_arm.run_to_position(58, direction='counterclockwise', speed=100)
             move.right_motor_left_for(650, 5)
-            move.forward_for(10, "cm", 100, 100)
+            force_breakpoint()
+            breakpoint(button.LEFT)
+            move.forward_for(7.5, "cm", 100, 100)
         @settrace
         def hit_shark():
             front_arm.run_to_position(290, direction='counterclockwise', speed=100)
@@ -415,9 +433,11 @@ async def main():
 
         move_() # naming conflicts
         hit_shark()
+    start_time = utime.ticks_ms()
     init()
     coral_reef()
     shark()
+    print(utime.ticks_ms() - start_time)
     #move.right_motor_right_for(100, -92)
     #move.backward_for(5, "cm", 100, 100)
     #move.right_motor_right_for(100, 179)

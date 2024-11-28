@@ -372,17 +372,7 @@ async def main():
 
         
         run(__motor_pair.move_tank_for_degrees(__motor_pair.PAIR_1, 725,-7150,-7150))#move.backward_for(35, "cm", 650, 650)
-    
-    start_time = utime.ticks_us()
-    hub.light.color(hub.light.POWER,YELLOW)
-    await init()
-    scuba()
-    ensure_coral_reef()
-    go_home()
-    end_time = utime.ticks_us()
-    # Calculate elapsed time for this iteration
-    elapsed_time = utime.ticks_diff(end_time, start_time)
-
-    print("Average execution time: {} milliseconds".format(elapsed_time/1000))
+    front_arm.run_to_position(95, speed=650)
+    back_arm.run_to_position(230, speed=650)
 if __name__ == '__main__':
     run(main())
