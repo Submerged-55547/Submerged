@@ -327,7 +327,7 @@ def unforce_breakpoint():
     def breakpoint(button):
         run(__wait_for_button(button))
         run(__wait_for_no_button(button))
-def ununforce_breakpoint():
+def force_breakpoint():
     global breakpoint
     def breakpoint(button):
         pass
@@ -335,7 +335,6 @@ MotionSensor().reset_yaw(0)
 front_arm=Motor("F")
 move=MotorPair("A", "D", wheel_diameter_mm=55.25, color_sensor=port.C)
 back_arm=Motor("E")
-ununforce_breakpoint()
 async def _main():
     await main()
 @settrace
@@ -347,7 +346,7 @@ async def main():
     @settrace
     def init():
         # back_arm.run_to_position(200, speed=100) initial
-        back_arm.run_to_position(260 , speed=100)
+        back_arm.run_to_position(280 , speed=100)
         # for extra 5front_arm.run_to_position(209, speed=20)
         front_arm.run_to_position(196, speed=20)
     @settrace
@@ -370,11 +369,15 @@ async def main():
                front_arm.run_to_position(196, speed=100)
             #   unforce_breakpoint()
                
-               ununforce_breakpoint()
             else:
                hub.light.color(hub.light.CONNECT, RED)
+            force_breakpoint()
+            breakpoint(button.LEFT)
+            unforce_breakpoint()
             #unforce_breakpoint()
-            
+            sleep_ms(400)
+            #breakpoint(button.LEFT)
+
             print(MotionSensor.get_yaw(),"A!")
             move.forward_for(18, "cm", 100, 100)
             #unforce_breakpoint()
@@ -410,13 +413,16 @@ async def main():
         @settrace
         def move_(): # naming conflicts
             front_arm.run_to_position(58, direction='counterclockwise', speed=100)
-            move.right_motor_left_for(650, 10)
+            breakpoint(button.LEFT)
+            # move.right_motor_left_for(650, 10)
             #unforce_breakpoint()
             
-            move.forward_for(7.5, "cm", 100, 100)
+            move.forward_for(4.5, "cm", 100, 100)
         @settrace
         def hit_shark():
-            front_arm.run_to_position(310, direction='counterclockwise', speed=100)
+            run(motor.run_to_absolute_position(port.F, 300, 100, direction=__spike3_COUNTERCLOCKWISE))
+            #breakpoint(button.LEFT  )
+            move.backward_for(5, "cm", 100, 100)
             front_arm.run_to_position(75, speed=200)
             move.right_motor_right_for(650, 0)
             move.backward_for(70, "cm", 650, 650)
