@@ -7,7 +7,7 @@ from color_sensor import color as __spike3_color, reflection as __spike3_reflect
 import distance_sensor
 import force_sensor
 from hub import port, light_matrix, button, motion_sensor, button
-from time import time
+from time import sleep_us, time
 from runloop import run, sleep_ms, until
 from math import pi
 from app import sound
@@ -306,8 +306,8 @@ async def main():
         #run(motor.run_to_absolute_position(port.E, 200, 100, stop=motor.HOLD))
         #hub.light_matrix.show_image(2)
         run(motor.run_to_absolute_position(port.F, 100, 50, direction=motor.SHORTEST_PATH, stop=motor.HOLD))
-        run(motor.run_to_absolute_position(port.E, 80, 650, direction=motor.SHORTEST_PATH, stop=motor.HOLD))
-        run(motor.run_to_absolute_position(port.E, 62, 20, direction=motor.SHORTEST_PATH, stop=motor.HOLD))
+        run(motor.run_to_absolute_position(port.E, 100, 650, direction=motor.COUNTERCLOCKWISE, stop=motor.HOLD))
+        run(motor.run_to_absolute_position(port.E, 62, 10, direction=motor.SHORTEST_PATH, stop=motor.HOLD))
         #print("E pos",motor.absolute_position(port.E))
 
     def scuba():
@@ -373,7 +373,7 @@ async def main():
         
         run(__motor_pair.move_tank_for_degrees(__motor_pair.PAIR_1, 725,-7150,-7150))#move.backward_for(35, "cm", 650, 650)
     front_arm.run_to_position(95, speed=650)
-    back_arm.run_to_position(230, speed=650)
+    back_arm.run_to_position(265, speed=650)
     await init()
     scuba()
     ensure_coral_reef()

@@ -347,10 +347,9 @@ async def main():
     @settrace
     def init():
         # back_arm.run_to_position(200, speed=100) initial
-        back_arm.run_to_position(280 , speed=100)
+        back_arm.run_to_position(260 , speed=100)
         # for extra 5front_arm.run_to_position(209, speed=20)
         front_arm.run_to_position(196, speed=20)
-        back_arm.run_to_position(300, speed=100)
     @settrace
     def coral_reef():
         @settrace
@@ -358,7 +357,7 @@ async def main():
             sleep_ms(100)
             move.forward_to_red_border(300, 300)
             #
-            move.forward_for(52, "cm", 100, 100)
+            move.forward_for(52, "cm", 650, 650)
             #
             front_arm.run_to_position(194, speed=20)    
             sleep_ms(100)
@@ -382,7 +381,6 @@ async def main():
             
         @settrace                 
         def deliver_and_hit_coral():
-            back_arm.run_to_position(300, speed=20)
             print(MotionSensor.get_yaw(),"A2!")
             # Waits 3000 ms before stopping front arm.
             start_time=utime.ticks_ms()
@@ -398,7 +396,6 @@ async def main():
             #motor.run_to_absolute_position(port.F, 300, 100)
             #asyncio.run(time_3000_ms())
             front_arm.run_to_position(220, speed=20)
-            back_arm.run_to_position(270, speed=20)
 
         @settrace
         def exit():    
@@ -413,34 +410,17 @@ async def main():
         @settrace
         def move_(): # naming conflicts
             front_arm.run_to_position(58, direction='counterclockwise', speed=100)
-            move.right_motor_left_for(650, 5)
+            move.right_motor_left_for(650, 10)
             #unforce_breakpoint()
             
-            back_arm.run_to_position(300, speed=20)
             move.forward_for(7.5, "cm", 100, 100)
         @settrace
         def hit_shark():
-            front_arm.run_to_position(300, direction='counterclockwise', speed=100)
+            front_arm.run_to_position(310, direction='counterclockwise', speed=100)
             front_arm.run_to_position(75, speed=200)
-            move.right_motor_right_for(650, -10)
-            move.backward_for(32, "cm", 650, 650)
-            #unforce_breakpoint()
+            move.right_motor_right_for(650, 0)
+            move.backward_for(70, "cm", 650, 650)
             
-            move.right_motor_right_for(100, -92)
-
-            move.backward_for(10, "cm", 100, 100)
-            
-            motor.run_for_degrees(port.A,100,-100)
-            
-            move.right_motor_right_for(100, -160)
-            move.backward_for(1,"cm",10,10)
-            #move.backward_for(5, "cm", 100, 100)
-            
-
-            back_arm.run_to_position(150, direction="counterclockwise", speed=-50)
-            
-            back_arm.run_to_position(270, direction="counterclockwise", speed=-50)
-
         move_() # naming conflicts
         hit_shark()
     
