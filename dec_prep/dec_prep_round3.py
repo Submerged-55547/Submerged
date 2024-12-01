@@ -348,6 +348,8 @@ async def main():
         # back_arm.run_to_position(200, speed=100) initial
         back_arm.run_to_position(280 , speed=100)
         # for extra 5front_arm.run_to_position(209, speed=20)
+        front_arm.run_to_position(125, speed=20)
+        front_arm.run_to_position(180, speed=100)
         front_arm.run_to_position(196, speed=20)
     @settrace
     def coral_reef():
@@ -358,28 +360,36 @@ async def main():
             #
             move.forward_for(52, "cm", 650, 650)
             #
-            front_arm.run_to_position(194, speed=20)    
-            sleep_ms(100)
+            #front_arm.run_to_position(194, speed=20)    
+            #sleep_ms(100)
             #
             print(MotionSensor.get_yaw(),"B!")
             
             if MotionSensor.get_yaw() > -2:
                print("IF")
-               move.left_motor_left_for(10,4)
-               front_arm.run_to_position(196, speed=100)
+               move.left_motor_left_for(20,4)
+               #front_arm.run_to_position(196, speed=100)
             #   unforce_breakpoint()
-               
+
+            elif MotionSensor.get_yaw() < -3.5:
+                #Experiment
+                print("ELIF")
+                move.left_motor_right_for(20,4)
+                front_arm.run_to_position(196, speed=20)
             else:
-               hub.light.color(hub.light.CONNECT, RED)
-            force_breakpoint()
-            breakpoint(button.LEFT)
-            unforce_breakpoint()
+
+                front_arm.run_to_position(192, speed=20)
+
+                hub.light.color(hub.light.CONNECT, RED)
+            #unforce_breakpoint()
+            #breakpoint(button.LEFT)
+            #unforce_breakpoint()
             #unforce_breakpoint()
             sleep_ms(400)
             #breakpoint(button.LEFT)
 
             print(MotionSensor.get_yaw(),"A!")
-            move.forward_for(18, "cm", 100, 100)
+            move.forward_for(18, "cm", 300, 300)
             #unforce_breakpoint()
             
         @settrace                 
@@ -391,19 +401,23 @@ async def main():
                 if (motor.absolute_position(port.F) >= 250):
                     return True
             
-            motor.run(port.F, 30)
-            run(until(arm_is_down, timeout=2000))
+            motor.run(port.F, 50)
+            start_xx = utime.ticks_ms()
+            run(until(arm_is_down, timeout=1500))
+            print("TIme",utime.ticks_ms()-start_xx)
             print(motor.absolute_position(port.F))
-            unforce_breakpoint()
+            #unforce_breakpoint()
             
             #motor.run_to_absolute_position(port.F, 300, 100)
             #asyncio.run(time_3000_ms())
-            front_arm.run_to_position(220, speed=20)
+            front_arm.run_to_position(220, speed=50)
 
         @settrace
         def exit():    
-            move.left_motor_left_for(20,0)
-            move.backward_for(16, "cm", 50, 50)
+            move.left_motor_left_for(100,0)
+            move.backward_for(16, "cm", 100, 100)
+            front_arm.run_to_position(58, direction='counterclockwise', speed=650)
+            move.forward_for(10, "cm", 100, 100)
         move_() # Naming conflicts
         deliver_and_hit_coral()
         exit()
@@ -412,18 +426,18 @@ async def main():
     def shark():
         @settrace
         def move_(): # naming conflicts
-            front_arm.run_to_position(58, direction='counterclockwise', speed=100)
-            breakpoint(button.LEFT)
-            # move.right_motor_left_for(650, 10)
+            #breakpoint(button.LEFT)
+            move.right_motor_left_for(200, 25)
             #unforce_breakpoint()
             
-            move.forward_for(4.5, "cm", 100, 100)
+            move.forward_for(3, "cm", 100, 100)
         @settrace
         def hit_shark():
-            run(motor.run_to_absolute_position(port.F, 300, 100, direction=__spike3_COUNTERCLOCKWISE))
+            #breakpoint(button.LEFT)
+            run(motor.run_to_absolute_position(port.F, 290, 100, direction=__spike3_COUNTERCLOCKWISE,stop=motor.HOLD))
             #breakpoint(button.LEFT  )
-            move.backward_for(5, "cm", 100, 100)
-            front_arm.run_to_position(75, speed=200)
+            move.backward_for(5, "cm", 300, 300)
+            front_arm.run_to_position(98, speed=650)
             move.right_motor_right_for(650, 0)
             move.backward_for(70, "cm", 650, 650)
             
