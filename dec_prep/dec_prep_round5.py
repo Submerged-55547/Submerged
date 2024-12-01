@@ -135,9 +135,7 @@ class MotorPair:
     def set_right_speed(self, right_speed):
         self.right_speed=right_speed
     async def __move_tank(self, amount, unit, left_speed=None, right_speed=None, timeout=None):
-        print("move_tank")
-        print(left_speed)
-
+        
         if left_speed is None:
             left_speed = self.left_speed
         if right_speed is None:
@@ -160,9 +158,7 @@ class MotorPair:
     def start_tank(self, left_speed, right_speed):
         __motor_pair.move_tank(self.pair, left_speed, right_speed)
     def forward(self, left_speed, right_speed):
-        print("forward")
-        print(left_speed)
-
+        
         self.start_tank(left_speed, right_speed)
     def stop(self):
         __motor_pair.stop(self.pair)
@@ -234,14 +230,10 @@ class MotorPair:
     def set_wheel_diameter(self, wheel_diameter_mm):
         self.wheel_diameter_mm = wheel_diameter_mm
     def forward_to(self, color: list[int], left_speed=None, right_speed=None):
-        print("forwardto")
-        print(left_speed)
-
+        
         run(self.__forward_to(color, left_speed, right_speed))
     async def __forward_to(self, color: list[int], left_speed=None, right_speed=None):
-        print("_forward_to")
-        print(left_speed)
-
+        
         self.forward(left_speed, right_speed)
         def color_sensor_is():
             if self.pair is not None:
@@ -254,8 +246,6 @@ class MotorPair:
     def forward_to_blue_border(self, left_speed, right_speed):
         self.forward_to([BLUE,AZURE], left_speed, right_speed)
     def forward_to_red_border(self, left_speed, right_speed):
-        print("forward red")
-        print(left_speed)
         self.forward_to([RED], left_speed, right_speed)
 class ColorSensor:
     def __init__(self, port_letter):
@@ -334,6 +324,7 @@ async def main():
     front_arm.run_to_position(85, speed=100)
     back_arm.run_to_position(200, speed=100)
     def artificial_habitat():
+        move.forward_for(2, "cm", 50, 50)
         move.right_motor_right_for(650,-40)
         move.right_motor_right_for(300,-60)
         move.right_motor_right_for(100,-90)
@@ -349,6 +340,7 @@ async def main():
             move.left_motor_right_for(50, -90)
         print("AFTER ", MotionSensor.get_yaw())
         sleep_ms(100)
+        breakpoint(button.LEFT)
         back_arm.run_to_position(70, direction="counterclockwise", speed=650)
         back_arm.run_to_position(20, direction="counterclockwise", speed=300)
         back_arm.run_to_position(0, direction="counterclockwise", speed=50)
@@ -369,6 +361,7 @@ async def main():
         move.right_motor_right_for(650,-137)
         front_arm.run_to_position(350,direction="counterclockwise", speed=100)
         move.forward_for(38,"cm",200,200)
+        breakpoint(button.LEFT)
         move.backward_for(55, "cm", 650, 650)
         hub.light.color(hub.light.POWER,GREEN)
     artificial_habitat()
