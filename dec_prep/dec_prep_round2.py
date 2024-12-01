@@ -314,17 +314,20 @@ back_arm=Motor("E")
 async def main():
     ...
     # Write your code after this line
-    back_arm.run_to_position(225, speed=-100)
-    move.backward_for(31 , "cm", 50, 50)
+    import utime
+    start = utime.ticks_ms()
+    back_arm.run_to_position(280, speed=-100)
+    
+    move.backward_for(31 , "cm", 200, 200)
     if (MotionSensor.get_yaw()>0):
         move.left_motor_right_for(10,0)
     else:
         move.left_motor_left_for(10,0)
-    print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!xxget guy first",MotionSensor.get_yaw(),"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-    back_arm.run_to_position(150, speed=-50)
-    sleep_ms(400)
-    move.forward_for(40, "cm", 100, 100)
-    back_arm.run_to_position(225, speed=-100)
+    back_arm.run_to_position(220, speed=-50)
+    sleep_ms(100)
+    back_arm.run_to_position(280, speed=-100)
+    move.forward_for(25, "cm", 100, 100)
+    print(utime.ticks_ms()-start)
 if __name__ == '__main__':
         run(main())
         raise SystemExit
