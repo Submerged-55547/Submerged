@@ -406,12 +406,12 @@ async def main():
             run(until(arm_is_down, timeout=1500))
             print("TIme",utime.ticks_ms()-start_xx)
             print(motor.absolute_position(port.F))
-            #unforce_breakpoint()
-            
+            unforce_breakpoint()
+            breakpoint(button.LEFT)
             #motor.run_to_absolute_position(port.F, 300, 100)
             #asyncio.run(time_3000_ms())
             front_arm.run_to_position(220, speed=50)
-
+            sleep_ms(200)
         @settrace
         def exit():    
             move.left_motor_left_for(100,0)

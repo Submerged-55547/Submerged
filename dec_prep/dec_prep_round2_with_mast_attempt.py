@@ -1,6 +1,7 @@
 import app
 import hub
-from motor import run as __spike3_run, stop as __spike3_stop, run_for_degrees as __spike3_run_for_degrees, READY as __spike3_READY, RUNNING as __spike3_RUNNING, STALLED as __spike3_STALLED, CANCELLED as __spike3_CANCELED, ERROR as __spike3_ERROR, run_for_time as __spike3_run_for_time, SHORTEST_PATH as __spike3_SHORTEST_PATH, CLOCKWISE as __spike3_CLOCKWISE, COUNTERCLOCKWISE as __spike3_COUNTERCLOCKWISE, run_to_absolute_position as __spike3_run_to_absolute_position, DISCONNECTED as __spike3_DISCONNECTED
+from motor import HOLD, run as __spike3_run, stop as __spike3_stop, run_for_degrees as __spike3_run_for_degrees, READY as __spike3_READY, RUNNING as __spike3_RUNNING, STALLED as __spike3_STALLED, CANCELLED as __spike3_CANCELED, ERROR as __spike3_ERROR, run_for_time as __spike3_run_for_time, SHORTEST_PATH as __spike3_SHORTEST_PATH, CLOCKWISE as __spike3_CLOCKWISE, COUNTERCLOCKWISE as __spike3_COUNTERCLOCKWISE, run_to_absolute_position as __spike3_run_to_absolute_position, DISCONNECTED as __spike3_DISCONNECTED
+import motor
 import motor_pair as __motor_pair
 from color_sensor import color as __spike3_color, reflection as __spike3_reflection
 import distance_sensor
@@ -319,37 +320,43 @@ async def main():
     #    ...
     import utime
     start = utime.ticks_ms()
+    front_arm.run_to_position(95, speed=100)
     back_arm.run_to_position(300, speed=-100)
-    breakpoint(button.LEFT)
-    #move.backward_for(31 , "cm", 200, 200)
     move.backward_for(10 , "cm", 200, 200)
     move.forward_to_red_border(-100,-100)
     move.backward_for(3 , "cm", 200, 200)
-
-    if (MotionSensor.get_yaw()>0):
-        move.left_motor_right_for(10,0)
+    print("SPOS: ", MotionSensor.get_yaw(), end=" ")
+    if (MotionSensor.get_yaw()>-2):
+        move.left_motor_left_for(10,-2)
+        print("IF: ", MotionSensor.get_yaw(), end=" ")
     else:
-        move.left_motor_left_for(10,0)
+        move.left_motor_right_for(10,-2)
+        print("ELSE: ", MotionSensor.get_yaw(), end=" ")
     back_arm.run_to_position(220, speed=-50)
-    sleep_ms(100)
+    await sleep_ms(100)
     back_arm.run_to_position(280, speed=-100)
-    move.forward_for(9, "cm", 100, 100)
-    move.right_motor_left_for(100, 96)
-    move.forward_for(24,"cm",100,100)
-    
-    front_arm.run_to_position(320,speed=100)
-    move.forward_for(9,"cm",100,100)
+    move.forward_for(10, "cm", 100, 100)
+    move.right_motor_left_for(100, 90)
+    move.forward_for(22,"cm",100,100)
+    front_arm.run_to_position(320, direction="counterclockwise", speed=100)
+    move.forward_for(11,"cm",100,100)
     front_arm.run_to_position(40,speed=100)
     move.forward_for(7,"cm",20,20)
     front_arm.run_to_position(60,speed=100)
-    move.forward_for(6,"cm",20,20)
-    sleep_ms(1000)
-    move.backward_for(10,"cm",100,100)
-    sleep_ms(500)
+    move.forward_for(10,"cm",20,20)
+    await sleep_ms(800)
+    move.backward_for(12,"cm",20,20)
+    await sleep_ms(500)
     move.forward_for(2,"cm",20,20)
     front_arm.run_to_position(100,speed=20)
-    move.forward_for(23,"cm",100,100)
+    move.right_motor_right_for(100, 90)
+    move.forward_for(13,"cm",100,100)
 
+    run(motor.run_to_absolute_position(port.F, 34, 10, direction=__spike3_SHORTEST_PATH, stop=HOLD))
+    move.forward_for(10,"cm",100,100)
+    run(motor.run_to_absolute_position(port.F, 120, 100, direction=__spike3_SHORTEST_PATH, stop=HOLD))
+    move.left_motor_left_for(100, 112)
+    move.backward_for(45,"cm",100,100)
     print(utime.ticks_ms()-start)
 if __name__ == '__main__':
         run(main())
