@@ -441,7 +441,6 @@ async def main():
     start_time = utime.ticks_ms()
     hub.light.color(hub.light.POWER,GREEN)
     
-
     init()
     coral_reef()
     shark()
