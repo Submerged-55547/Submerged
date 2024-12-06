@@ -357,20 +357,12 @@ async def main():
         def move_(): # Naming conflicts
             sleep_ms(100)
             move.forward_to_red_border(300, 300)
-            #
             move.forward_for(52, "cm", 650, 650)
-            #
-            #front_arm.run_to_position(194, speed=20)    
-            #sleep_ms(100)
-            #
             print(MotionSensor.get_yaw(),"B!")
             
             if MotionSensor.get_yaw() > -2:
                print("IF")
                move.left_motor_left_for(20,4)
-               #front_arm.run_to_position(196, speed=100)
-            #   unforce_breakpoint()
-
             elif MotionSensor.get_yaw() < -3.5:
                 #Experiment
                 print("ELIF")
@@ -381,11 +373,9 @@ async def main():
                 front_arm.run_to_position(192, speed=20)
 
             sleep_ms(400)
-            #breakpoint(button.LEFT)
-
+            
             print(MotionSensor.get_yaw(),"A!")
             move.forward_for(18, "cm", 300, 300)
-            #unforce_breakpoint()
             
         @settrace                 
         def deliver_and_hit_coral():
@@ -397,13 +387,8 @@ async def main():
                     return True
             
             motor.run(port.F, 50)
-            start_xx = utime.ticks_ms()
             run(until(arm_is_down, timeout=1500))
-            print("TIme",utime.ticks_ms()-start_xx)
-            print(motor.absolute_position(port.F))
             unforce_breakpoint()
-            #motor.run_to_absolute_position(port.F, 300, 100)
-            #asyncio.run(time_3000_ms())
             front_arm.run_to_position(220, speed=50)
             sleep_ms(200)
         @settrace
@@ -420,16 +405,12 @@ async def main():
     def shark():
         @settrace
         def move_(): # naming conflicts
-            #breakpoint(button.LEFT)
             move.right_motor_left_for(200, 25)
-            #unforce_breakpoint()
             
             move.forward_for(3, "cm", 100, 100)
         @settrace
         def hit_shark():
-            #breakpoint(button.LEFT)
             run(motor.run_to_absolute_position(port.F, 290, 100, direction=__spike3_COUNTERCLOCKWISE,stop=motor.HOLD))
-            #breakpoint(button.LEFT  )
             move.backward_for(5, "cm", 300, 300)
             front_arm.run_to_position(98, speed=650)
             move.right_motor_right_for(650, 0)
@@ -446,10 +427,7 @@ async def main():
     shark()
     
     print(utime.ticks_ms() - start_time)
-    #move.right_motor_right_for(100, -92)
-    #move.backward_for(5, "cm", 100, 100)
-    #move.right_motor_right_for(100, 179)
-
+    
 
 if __name__ == '__main__':
         run(_main())

@@ -338,8 +338,16 @@ async def main():
         back_arm.run_to_position(280, speed=-100)
     def mast():
         move.forward_for(10, "cm", 300, 300)
-        move.right_motor_left_for(100, 90)
+        move.right_motor_left_for(650, 70)
+        move.right_motor_left_for(50, 90)
         move.forward_for(22,"cm",300,300)
+        if (MotionSensor.get_yaw()>90):
+            move.left_motor_left_for(20,90)
+            print("IF: ", MotionSensor.get_yaw(), end=" ")
+        else:
+            move.left_motor_right_for(20,90)
+            print("ELSE: ", MotionSensor.get_yaw(), end=" ")
+
         front_arm.run_to_position(320, direction="counterclockwise", speed=100)
         move.forward_for(11,"cm",100,100)
         front_arm.run_to_position(40,speed=100)
@@ -351,9 +359,9 @@ async def main():
         run(sleep_ms(300))
         move.forward_for(2,"cm",20,20)
     def back_home():
-        front_arm.run_to_position(100,speed=100)
-        move.left_motor_left_for(100, 112)
-        move.backward_for(45,"cm",100,100)
+        front_arm.run_to_position(300,speed=100)
+        move.left_motor_left_for(650, 112)
+        move.backward_for(45,"cm",650,650)
     start = utime.ticks_ms()
     init()
     coral_drop()
