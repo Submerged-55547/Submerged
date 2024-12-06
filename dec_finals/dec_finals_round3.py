@@ -440,10 +440,12 @@ async def main():
     
     start_time = utime.ticks_ms()
     hub.light.color(hub.light.POWER,GREEN)
+    
 
     init()
     coral_reef()
     shark()
+    
     print(utime.ticks_ms() - start_time)
     #move.right_motor_right_for(100, -92)
     #move.backward_for(5, "cm", 100, 100)

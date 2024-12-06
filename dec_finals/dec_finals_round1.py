@@ -384,7 +384,7 @@ async def main():
         
         run(__motor_pair.move_tank_for_degrees(__motor_pair.PAIR_1, 725,-7150,-7150))#move.backward_for(35, "cm", 650, 650)
     front_arm.run_to_position(95, speed=650)
-    back_arm.run_to_position(265, speed=650)
+    back_arm.run_to_position(300, speed=650)
     await init()
     scuba()
     ensure_coral_reef()
