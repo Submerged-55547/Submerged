@@ -135,7 +135,9 @@ class MotorPair:
     def set_right_speed(self, right_speed):
         self.right_speed=right_speed
     async def __move_tank(self, amount, unit, left_speed=None, right_speed=None, timeout=None):
-        
+        print("move_tank")
+        print(left_speed)
+
         if left_speed is None:
             left_speed = self.left_speed
         if right_speed is None:
@@ -158,7 +160,9 @@ class MotorPair:
     def start_tank(self, left_speed, right_speed):
         __motor_pair.move_tank(self.pair, left_speed, right_speed)
     def forward(self, left_speed, right_speed):
-        
+        print("forward")
+        print(left_speed)
+
         self.start_tank(left_speed, right_speed)
     def stop(self):
         __motor_pair.stop(self.pair)
@@ -230,10 +234,14 @@ class MotorPair:
     def set_wheel_diameter(self, wheel_diameter_mm):
         self.wheel_diameter_mm = wheel_diameter_mm
     def forward_to(self, color: list[int], left_speed=None, right_speed=None):
-        
+        print("forwardto")
+        print(left_speed)
+
         run(self.__forward_to(color, left_speed, right_speed))
     async def __forward_to(self, color: list[int], left_speed=None, right_speed=None):
-        
+        print("_forward_to")
+        print(left_speed)
+
         self.forward(left_speed, right_speed)
         def color_sensor_is():
             if self.pair is not None:
@@ -246,6 +254,8 @@ class MotorPair:
     def forward_to_blue_border(self, left_speed, right_speed):
         self.forward_to([BLUE,AZURE], left_speed, right_speed)
     def forward_to_red_border(self, left_speed, right_speed):
+        print("forward red")
+        print(left_speed)
         self.forward_to([RED], left_speed, right_speed)
 class ColorSensor:
     def __init__(self, port_letter):
@@ -318,16 +328,13 @@ MotionSensor().reset_yaw(0)
 front_arm=Motor("F")
 back_arm=Motor("E")
 move=MotorPair("A", "D", wheel_diameter_mm=55.25, color_sensor=port.B)
-import utime
 async def main():
     ...
 
     # Write your code after this line
-    start_time = utime.ticks_ms()
     front_arm.run_to_position(85, speed=100)
     back_arm.run_to_position(200, speed=100)
     def artificial_habitat():
-        move.forward_for(0.5,"cm",10,10)
         move.right_motor_right_for(650,-40)
         move.right_motor_right_for(300,-60)
         move.right_motor_right_for(100,-90)
@@ -348,7 +355,7 @@ async def main():
             move.left_motor_right_for(50, -90)
         print("AFTER ", MotionSensor.get_yaw())
 
-        move.forward_for(23, "cm", -50, -50)
+        move.forward_for(20, "cm", -50, -50)
         sleep_ms(100)
         if MotionSensor.get_yaw() > 90:
             print("IF ", MotionSensor.get_yaw())
@@ -357,70 +364,48 @@ async def main():
             print("ELSE ", MotionSensor.get_yaw())
             move.left_motor_right_for(50, -90)
         print("AFTER ", MotionSensor.get_yaw())
-        move.forward_for(24, "cm", -50, -50)
+        move.forward_for(27, "cm", -50, -50)
         sleep_ms(100)
-        if MotionSensor.get_yaw() > 93:
+        if MotionSensor.get_yaw() > 90:
             print("IF ", MotionSensor.get_yaw())
-            move.left_motor_left_for(50, -93)
+            move.left_motor_left_for(50, -90)
         else:
             print("ELSE ", MotionSensor.get_yaw())
-            move.left_motor_right_for(50, -93)
+            move.left_motor_right_for(50, -90)
         print("AFTER ", MotionSensor.get_yaw())
         sleep_ms(100)
         back_arm.run_to_position(100, direction="counterclockwise", speed=650)
         back_arm.run_to_position(60, direction="counterclockwise", speed=50)
-        hub.light.color(hub.light.POWER,RED)
-
         #breakpoint(button.LEFT)
-        print(motor.absolute_position(port.E))
+        #print(motor.absolute_position(port.E))
         sleep_ms(300)
-        move.forward_for(18, "cm", 20, 20)
-        hub.light.color(hub.light.POWER,ORANGE)
-        
-        back_arm.run_to_position(95, direction="clockwise", speed=50)
+        move.forward_for(19.5, "cm", 100, 100)
+        sleep_ms(300)
 
         #breakpoint(button.LEFT)
-        #move.left_motor_right_for(50, -96)
-        move.forward_for(1, "cm", 10, 10)
-        #move.backward_for(2, "cm", 10, 10)
-        hub.light.color(hub.light.POWER,YELLOW)
-        #breakpoint(button.LEFT)
-        back_arm.run_to_position(140, direction="clockwise", speed=50)
-
-
-        hub.light.color(hub.light.POWER,GREEN)
-
-        #breakpoint(button.LEFT)
-        move.forward_for(6, "cm", 20, 20)
-
-        hub.light.color(hub.light.POWER,BLUE)
-
-        #breakpoint(button.LEFT)
-        #move.backward_for(1, "cm", 10, 10)
+        move.backward_for(1, "cm", 10, 10)
         #back_arm.run_for_degrees(90,50)
+        back_arm.run_to_position(140, direction="clockwise", speed=50)
         #breakpoint(button.LEFT)
     def unknown_creature():
         move.forward_for(3, "cm", 50, 50)
-        back_arm.run_to_position(280, direction="clockwise", speed=650)
+        back_arm.run_to_position(200, direction="clockwise", speed=650)
 
         move.left_motor_left_for(650, -53)
-        front_arm.run_to_position(110, speed=650)
+        front_arm.run_to_position(125, speed=650)
+        breakpoint(button.LEFT)
+        front_arm.run_to_position(110, speed=100)
         move.backward_for(21, "cm", 650, 650) 
         move.left_motor_right_for(650, -90)
-        move.backward_for(85, "cm", 650, 650)
+        move.backward_for(80, "cm", 650, 650)
         move.right_motor_right_for(650,-137)
         front_arm.run_to_position(350,direction="counterclockwise", speed=100)
-        move.forward_for(32,"cm",200,200)
-        move.backward_for(5, "cm", 650, 650)
-        move.right_motor_left_for(650,-155)
-        breakpoint(button.LEFT)
-        move.backward_for(40, "cm", 650, 650)
-        front_arm.run_to_position(140,direction="clockwise", speed=100)
-
-    hub.light.color(hub.light.POWER,GREEN)
+        move.forward_for(38,"cm",300,300)
+        move.backward_for(55, "cm", 650, 650)
+    hub.light.color(hub.light.POWER,BLUE)
     artificial_habitat()
     unknown_creature()
-    print(utime.ticks_ms() - start_time)
+    
 if __name__ == '__main__':
         run(main())
         raise SystemExit
