@@ -1,4 +1,4 @@
-VARUN="E03970000-3100-3D00-0F51-313239373239"
+print("calling 346")print("calling 346")VARUN="E03970000-3100-3D00-0F51-313239373239"
 def is_id(id):
     return id==hub.hardware_id()+hub.device_uuid()
 import app
@@ -317,7 +317,6 @@ async def main():
 
     def scuba():
         #all the way front
-#        move.forward_for(59, "cm", 100,100)
         #print("calling 315")
         run(__motor_pair.move_tank_for_degrees(__motor_pair.PAIR_1, 456,-7150,-7150))#move.backward_for(22,"cm",650,650)
         move.forward_to([RED],-100,-100)
@@ -333,8 +332,7 @@ async def main():
             move.right_motor_left_for(50, 56)
         else:          
             move.right_motor_left_for(50, 58)                                                   
-        #print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!get guy first",MotionSensor.get_yaw(),"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-
+        
         #first ram in
         sleep_ms(50)
         #print("calling 330")
@@ -342,9 +340,6 @@ async def main():
         run(__motor_pair.move_tank_for_degrees(__motor_pair.PAIR_1, 290,-110,-110))
         #move.backward_for(14,"cm", 10,10)
         sleep_ms(50)
-        #global get_guy
-        #get_guy=MotionSensor.get_yaw()
-        #print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!get guy",MotionSensor.get_yaw(),"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         #get the guy
         breakpoint(button.LEFT)
         run(motor.run_for_degrees(port.E, 40, 20, stop=motor.HOLD))
@@ -356,7 +351,6 @@ async def main():
         run(motor.run_for_degrees(port.E, 100, 50, stop=motor.HOLD))
     def ensure_coral_reef():
         # second ram in
-        #print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!get guy",MotionSensor.get_yaw(),"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
         #print("calling 346")
 
         run(__motor_pair.move_tank_for_degrees(__motor_pair.PAIR_1, 207,-2200,-2200))#move.backward_for(10,"cm",200,200)
@@ -365,8 +359,7 @@ async def main():
         run(__motor_pair.move_tank_for_degrees(__motor_pair.PAIR_1, 207,7150,7150))#move.forward_for(10, "cm",650, 650)
         move.left_motor_left_for(650, 110)
         move.left_motor_left_for(300, 136)
-        #move.left_motor_left_for(50, 136)
-
+        
         #print("calling 355")
 
         
@@ -374,9 +367,6 @@ async def main():
         breakpoint(button.LEFT)
 
         move.left_motor_left_for(300, 160)
-        print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!grab",MotionSensor.get_yaw(),"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-
-        #print(get_guy, MotionSensor.get_yaw(), sep=",")
         run(motor.run_to_absolute_position(port.F, 20, 650, stop=motor.HOLD))
         run(motor.run_to_absolute_position(port.F, 330, 150, stop=motor.HOLD))
         #print("calling 364")

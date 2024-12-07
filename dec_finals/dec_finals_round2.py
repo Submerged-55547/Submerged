@@ -324,8 +324,8 @@ async def main():
         front_arm.run_to_position(95, speed=100)
         back_arm.run_to_position(300, speed=-100)
     def coral_drop():
-        move.backward_for(10 , "cm", 650, 650)
-        move.forward_to_red_border(-300,-300)
+        move.backward_for(20 , "cm", 650, 650)
+        move.forward_to_red_border(-200,-200)
         move.backward_for(3 , "cm", 650, 650)
         if (MotionSensor.get_yaw()>-2):
             move.left_motor_left_for(20,-2)
@@ -339,27 +339,28 @@ async def main():
     def mast():
         move.forward_for(10, "cm", 300, 300)
         move.right_motor_left_for(650, 70)
+        print("after 70", MotionSensor.get_yaw())
+
         move.right_motor_left_for(50, 90)
         move.forward_for(22,"cm",300,300)
-        if (MotionSensor.get_yaw()>90):
-            move.left_motor_left_for(20,90)
-            print("IF: ", MotionSensor.get_yaw(), end=" ")
-        else:
-            move.left_motor_right_for(20,90)
-            print("ELSE: ", MotionSensor.get_yaw(), end=" ")
+        print(MotionSensor.get_yaw())
 
+        move.left_motor_left_for(20,95)
+        
         front_arm.run_to_position(320, direction="counterclockwise", speed=100)
         move.forward_for(11,"cm",100,100)
+        print("A",MotionSensor.get_yaw())
         front_arm.run_to_position(40,speed=100)
         move.forward_for(7,"cm",20,20)
+        print("B",MotionSensor.get_yaw())
         front_arm.run_to_position(60,speed=100)
-        move.forward_for(6,"cm",20,20)
-        run(sleep_ms(800))
+        move.forward_for(8,"cm",20,20)
+        print("C",MotionSensor.get_yaw())
+        #breakpoint(button.LEFT)
+        run(sleep_ms(500))
         move.backward_for(14,"cm",20,20)
-        run(sleep_ms(300))
-        move.forward_for(2,"cm",20,20)
     def back_home():
-        front_arm.run_to_position(300,speed=100)
+        front_arm.run_to_position(100,speed=300)
         move.left_motor_left_for(650, 112)
         move.backward_for(45,"cm",650,650)
     start = utime.ticks_ms()
@@ -367,6 +368,7 @@ async def main():
     coral_drop()
     mast()
     back_home()
+    print("im back")
     print(utime.ticks_ms()-start)
 if __name__ == '__main__':
         run(main())
