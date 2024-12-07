@@ -1,4 +1,4 @@
-print("calling 346")print("calling 346")VARUN="E03970000-3100-3D00-0F51-313239373239"
+VARUN="E03970000-3100-3D00-0F51-313239373239"
 def is_id(id):
     return id==hub.hardware_id()+hub.device_uuid()
 import app
