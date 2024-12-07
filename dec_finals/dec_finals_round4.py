@@ -365,15 +365,14 @@ async def main():
         back_arm.run_to_position(100, direction="counterclockwise", speed=650)
         back_arm.run_to_position(60, direction="counterclockwise", speed=50)
         sleep_ms(50)
-        move.forward_for(18, "cm", 20, 20)
+        move.forward_for(18, "cm", 50, 50)
         
         back_arm.run_to_position(95, direction="clockwise", speed=50)
-        move.forward_for(1, "cm", 10, 10)
-        breakpoint(button.LEFT)
+        move.forward_for(1, "cm", 50, 50)
         back_arm.run_to_position(140, direction="clockwise", speed=50)
-        move.forward_for(6, "cm", 20, 20)
-    def unknown_creature():
         move.forward_for(3, "cm", 50, 50)
+    def unknown_creature():
+        move.forward_for(6, "cm", 650, 650)
         back_arm.run_to_position(280, direction="clockwise", speed=650)
 
         move.left_motor_left_for(650, -53)
@@ -382,12 +381,13 @@ async def main():
         move.left_motor_right_for(650, -90)
         move.backward_for(83.5, "cm", 650, 650)
         move.right_motor_right_for(650,-137)
+        front_arm.run_to_position(20,direction="counterclockwise", speed=650)
         front_arm.run_to_position(350,direction="counterclockwise", speed=100)
         move.forward_for(29,"cm",200,200)
         move.backward_for(13, "cm", 650, 650)
         move.right_motor_right_for(300,-155)
         move.backward_for(40, "cm", 650, 650)
-        front_arm.run_to_position(140,direction="clockwise", speed=300)
+        front_arm.run_to_position(140,direction="clockwise", speed=650)
 
     hub.light.color(hub.light.POWER,GREEN)
     artificial_habitat()
