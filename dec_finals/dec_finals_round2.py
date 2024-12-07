@@ -354,7 +354,7 @@ async def main():
         move.forward_for(7,"cm",20,20)
         print("B",MotionSensor.get_yaw())
         front_arm.run_to_position(60,speed=100)
-        move.forward_for(8,"cm",20,20)
+        move.forward_for(9.5,"cm",20,20)
         print("C",MotionSensor.get_yaw())
         #breakpoint(button.LEFT)
         run(sleep_ms(500))
@@ -368,9 +368,7 @@ async def main():
     coral_drop()
     mast()
     back_home()
-    print("im back")
     print(utime.ticks_ms()-start)
 if __name__ == '__main__':
         run(main())
-        while True: ...
-        raise SystemExit
+        raise SystemExit()

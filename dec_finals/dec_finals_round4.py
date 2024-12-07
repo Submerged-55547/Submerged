@@ -333,7 +333,7 @@ async def main():
     back_arm.run_to_position(200, speed=100)
     def artificial_habitat():
         if is_id(VARUN):
-            move.backward_for(1,"cm",10,10)
+            move.backward_for(2,"cm",10,10)
         else:
             move.forward_for(0.5,"cm",10,10)
         move.right_motor_right_for(650,-40)
@@ -350,13 +350,13 @@ async def main():
         else:
             move.left_motor_right_for(50, -90)
 
-        move.forward_for(23, "cm", -50, -50)
+        move.forward_for(23, "cm", -100, -100)
         sleep_ms(50)
         if MotionSensor.get_yaw() > 90:
             move.left_motor_left_for(50, -90)
         else:
             move.left_motor_right_for(50, -90)
-        move.forward_for(24, "cm", -50, -50)
+        move.forward_for(24, "cm", -100, -100)
         sleep_ms(50)
         if MotionSensor.get_yaw() > 93:
             move.left_motor_left_for(50, -93)
@@ -369,8 +369,9 @@ async def main():
         
         back_arm.run_to_position(95, direction="clockwise", speed=50)
         move.forward_for(1, "cm", 50, 50)
+        move.backward_for(0.5, "cm", 50, 50)
         back_arm.run_to_position(140, direction="clockwise", speed=50)
-        move.forward_for(3, "cm", 50, 50)
+        move.forward_for(3.5, "cm", 50, 50)
     def unknown_creature():
         move.forward_for(6, "cm", 650, 650)
         back_arm.run_to_position(280, direction="clockwise", speed=650)

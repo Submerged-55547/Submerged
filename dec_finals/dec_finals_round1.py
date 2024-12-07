@@ -304,17 +304,14 @@ move=MotorPair("A", "D", wheel_diameter_mm=55.25, color_sensor=port.C)
 back_arm=Motor("E")
 async def main():
     ...
+    start_time = utime.ticks_ms()
     async def init():
         hub.light.color(hub.light.POWER,ORANGE)
-
-        #hub.light_matrix.show_image(1)
-        #run(motor.run_to_absolute_position(port.E, 200, 100, stop=motor.HOLD))
-        #hub.light_matrix.show_image(2)
-        run(motor.run_to_absolute_position(port.F, 100, 50, direction=motor.SHORTEST_PATH, stop=motor.HOLD))
-        run(motor.run_to_absolute_position(port.E, 100, 650, direction=motor.COUNTERCLOCKWISE, stop=motor.HOLD))
-        run(motor.run_to_absolute_position(port.E, 62, 10, direction=motor.SHORTEST_PATH, stop=motor.HOLD))
-        #print("E pos",motor.absolute_position(port.E))
-
+        
+        #run(motor.run_to_absolute_position(port.F, 100, 50, direction=motor.SHORTEST_PATH, stop=motor.HOLD))
+        run(motor.run_to_absolute_position(port.E, 90, 650, direction=motor.COUNTERCLOCKWISE, stop=motor.HOLD))
+        run(motor.run_to_absolute_position(port.E, 62, 50, direction=motor.SHORTEST_PATH, stop=motor.HOLD))
+        
     def scuba():
         #all the way front
         #print("calling 315")
@@ -341,7 +338,6 @@ async def main():
         #move.backward_for(14,"cm", 10,10)
         sleep_ms(50)
         #get the guy
-        breakpoint(button.LEFT)
         run(motor.run_for_degrees(port.E, 40, 20, stop=motor.HOLD))
         sleep_ms(100)
         #print("calling 339")
@@ -364,8 +360,6 @@ async def main():
 
         
         run(__motor_pair.move_tank_for_degrees(__motor_pair.PAIR_1, 456,-7150,-7150))#move.backward_for(22, "cm", 650, 650)
-        breakpoint(button.LEFT)
-
         move.left_motor_left_for(300, 160)
         run(motor.run_to_absolute_position(port.F, 20, 650, stop=motor.HOLD))
         run(motor.run_to_absolute_position(port.F, 330, 150, stop=motor.HOLD))
@@ -373,11 +367,14 @@ async def main():
 
         
         run(__motor_pair.move_tank_for_degrees(__motor_pair.PAIR_1, 725,-7150,-7150))#move.backward_for(35, "cm", 650, 650)
-    front_arm.run_to_position(95, speed=650)
-    back_arm.run_to_position(300, speed=650)
     await init()
     scuba()
     ensure_coral_reef()
     go_home()
+    front_arm.run_to_position(95, speed=650)
+    back_arm.run_to_position(300, speed=650)
+
+    print(utime.ticks_ms() - start_time)
 if __name__ == '__main__':
     run(main())
+    raise SystemExit()
