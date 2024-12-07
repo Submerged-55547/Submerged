@@ -351,25 +351,25 @@ async def main():
             move.left_motor_right_for(50, -90)
 
         move.forward_for(23, "cm", -50, -50)
-        sleep_ms(100)
+        sleep_ms(50)
         if MotionSensor.get_yaw() > 90:
             move.left_motor_left_for(50, -90)
         else:
             move.left_motor_right_for(50, -90)
         move.forward_for(24, "cm", -50, -50)
-        sleep_ms(100)
+        sleep_ms(50)
         if MotionSensor.get_yaw() > 93:
             move.left_motor_left_for(50, -93)
         else:
             move.left_motor_right_for(50, -93)
-        sleep_ms(100)
         back_arm.run_to_position(100, direction="counterclockwise", speed=650)
         back_arm.run_to_position(60, direction="counterclockwise", speed=50)
-        sleep_ms(300)
+        sleep_ms(50)
         move.forward_for(18, "cm", 20, 20)
         
         back_arm.run_to_position(95, direction="clockwise", speed=50)
         move.forward_for(1, "cm", 10, 10)
+        breakpoint(button.LEFT)
         back_arm.run_to_position(140, direction="clockwise", speed=50)
         move.forward_for(6, "cm", 20, 20)
     def unknown_creature():
