@@ -357,26 +357,43 @@ async def main():
         def move_(): # Naming conflicts
             sleep_ms(100)
             move.forward_to_red_border(300, 300)
-            move.forward_for(52, "cm", 650, 650)
-            print(MotionSensor.get_yaw(),"B!")
-            
-            if MotionSensor.get_yaw() > -2:
-               print("IF")
-               move.left_motor_left_for(20,4)
-            elif MotionSensor.get_yaw() < -3.5:
-                #Experiment
-                print("ELIF")
-                move.left_motor_right_for(20,4)
-                front_arm.run_to_position(196, speed=20)
+            move.forward_for(26, "cm", 650, 650)
+            if MotionSensor.get_yaw() < 0:
+                move.left_motor_left_for(50,0)
             else:
+                move.left_motor_right_for(50,0)
+    
+            move.forward_for(26, "cm", 650, 650)
+            if MotionSensor.get_yaw() > 0:
+                print("IF B4",MotionSensor.get_yaw())
+                move.left_motor_right_for(10,-3)
+                print("IF",MotionSensor.get_yaw())
+            elif MotionSensor.get_yaw() < -2:
+                print("ELSE B4",MotionSensor.get_yaw())
+                move.left_motor_right_for(10,-2.5)
+                print("ELSE",MotionSensor.get_yaw())
+            #if MotionSensor.get_yaw() > -2:
+            #    print("IF")
+            #    move.left_motor_left_for(20,4)
+            #    unforce_breakpoint()
+            #    breakpoint(button.LEFT)
+            #elif MotionSensor.get_yaw() < -3.5:
+            #    #Experiment
+            #    print("ELIF")
+            #    move.left_motor_right_for(20,-8)
+            #    front_arm.run_to_position(196, speed=20)
+            #    unforce_breakpoint()
+            #    breakpoint(button.LEFT)
+            #else:
+            #    move.left_motor_right_for(20,-8)#
 
-                front_arm.run_to_position(192, speed=20)
-
+            #    front_arm.run_to_position(192, speed=20)
+            
             sleep_ms(400)
             
             print(MotionSensor.get_yaw(),"A!")
             move.forward_for(18, "cm", 300, 300)
-            
+
         @settrace                 
         def deliver_and_hit_coral():
             print(MotionSensor.get_yaw(),"A2!")
@@ -389,7 +406,7 @@ async def main():
             motor.run(port.F, 50)
             run(until(arm_is_down, timeout=1500))
             unforce_breakpoint()
-            front_arm.run_to_position(220, speed=50)
+            front_arm.run_to_position(210, speed=50)
             sleep_ms(200)
         @settrace
         def exit():    
