@@ -326,7 +326,6 @@ move=MotorPair("A", "D", wheel_diameter_mm=55.25, color_sensor=port.B)
 import utime
 async def main():
     ...
-
     # Write your code after this line
     start_time = utime.ticks_ms()
     front_arm.run_to_position(85, speed=100)
@@ -349,23 +348,22 @@ async def main():
             move.left_motor_left_for(50, -90)
         else:
             move.left_motor_right_for(50, -90)
-
         move.forward_for(23, "cm", -100, -100)
         sleep_ms(50)
         if MotionSensor.get_yaw() > 90:
             move.left_motor_left_for(50, -90)
         else:
             move.left_motor_right_for(50, -90)
-        move.forward_for(24, "cm", -100, -100)
+        move.forward_for(26, "cm", -100, -100)
         sleep_ms(50)
         if MotionSensor.get_yaw() > 93:
-            move.left_motor_left_for(50, -93)
+            move.left_motor_left_for(50, -91)
         else:
-            move.left_motor_right_for(50, -93)
+            move.left_motor_right_for(50, -91)
         back_arm.run_to_position(100, direction="counterclockwise", speed=650)
         back_arm.run_to_position(60, direction="counterclockwise", speed=50)
         sleep_ms(50)
-        move.forward_for(18, "cm", 50, 50)
+        move.forward_for(17.5, "cm", 50, 50)
         
         back_arm.run_to_position(95, direction="clockwise", speed=50)
         move.forward_for(1, "cm", 50, 50)
@@ -375,11 +373,12 @@ async def main():
     def unknown_creature():
         move.forward_for(6, "cm", 650, 650)
         back_arm.run_to_position(280, direction="clockwise", speed=650)
-
+        
         move.left_motor_left_for(650, -53)
         front_arm.run_to_position(110, speed=650)
         move.backward_for(20.5, "cm", 650, 650) 
-        move.left_motor_right_for(650, -90)
+        move.left_motor_right_for(300, -90)
+        print(MotionSensor.get_yaw())
         move.backward_for(83.5, "cm", 650, 650)
         move.right_motor_right_for(650,-137)
         front_arm.run_to_position(20,direction="counterclockwise", speed=650)
@@ -389,7 +388,7 @@ async def main():
         move.right_motor_right_for(300,-155)
         move.backward_for(40, "cm", 650, 650)
         front_arm.run_to_position(140,direction="clockwise", speed=650)
-
+        
     hub.light.color(hub.light.POWER,GREEN)
     artificial_habitat()
     unknown_creature()
