@@ -354,7 +354,7 @@ async def main():
             move.left_motor_left_for(50, -90)
         else:
             move.left_motor_right_for(50, -90)
-        move.forward_for(26, "cm", -100, -100)
+        move.forward_for(24, "cm", -100, -100)
         sleep_ms(50)
         if MotionSensor.get_yaw() > 93:
             move.left_motor_left_for(50, -91)
@@ -363,7 +363,7 @@ async def main():
         back_arm.run_to_position(100, direction="counterclockwise", speed=650)
         back_arm.run_to_position(60, direction="counterclockwise", speed=50)
         sleep_ms(50)
-        move.forward_for(17.5, "cm", 50, 50)
+        move.forward_for(18, "cm", 50, 50)
         
         back_arm.run_to_position(95, direction="clockwise", speed=50)
         move.forward_for(1, "cm", 50, 50)
@@ -389,7 +389,7 @@ async def main():
         move.backward_for(40, "cm", 650, 650)
         front_arm.run_to_position(140,direction="clockwise", speed=650)
         
-    hub.light.color(hub.light.POWER,GREEN)
+    hub.light.color(hub.light.POWER,BLUE)
     artificial_habitat()
     unknown_creature()
     print(utime.ticks_ms() - start_time)
