@@ -323,7 +323,7 @@ async def main():
         
 
         #position for scuba
-        move.right_motor_left_for(650, 38)
+        move.right_motor_left_for(300, 38)
         ##Vihaan=58. Varun=56
         if is_id(VARUN):
             move.right_motor_left_for(50, 56)
@@ -353,7 +353,7 @@ async def main():
     def go_home():
         
         run(__motor_pair.move_tank_for_degrees(__motor_pair.PAIR_1, 207,7150,7150))#move.forward_for(10, "cm",650, 650)
-        move.left_motor_left_for(650, 110)
+        move.left_motor_left_for(300, 110)
         move.left_motor_left_for(300, 136)
         
         #print("calling 355")

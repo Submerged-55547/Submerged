@@ -1,8 +1,20 @@
-VARUN="E03970000-3100-3D00-0F51-313239373239"
+import sys
+import gc
+import motor
+from hub import port
+#from typing import _get_type_hints_obj_allowed_types
 
-def is_id(id):
-    return id==hub.hardware_id()+hub.device_uuid()
-
+import utime
+def settrace(func):
+    def wrapper(*args, **kwargs):
+        result = func(*args, **kwargs)
+        return result
+    return wrapper
+class MpdbQuit(Exception):
+    pass
+import app
+import utime
+import asyncio
 import hub
 from motor import run as __spike3_run, stop as __spike3_stop, run_for_degrees as __spike3_run_for_degrees, READY as __spike3_READY, RUNNING as __spike3_RUNNING, STALLED as __spike3_STALLED, CANCELLED as __spike3_CANCELED, ERROR as __spike3_ERROR, run_for_time as __spike3_run_for_time, SHORTEST_PATH as __spike3_SHORTEST_PATH, CLOCKWISE as __spike3_CLOCKWISE, COUNTERCLOCKWISE as __spike3_COUNTERCLOCKWISE, run_to_absolute_position as __spike3_run_to_absolute_position, DISCONNECTED as __spike3_DISCONNECTED
 import motor
@@ -11,13 +23,12 @@ from color_sensor import color as __spike3_color, reflection as __spike3_reflect
 import distance_sensor
 import force_sensor
 from hub import port, light_matrix, button, motion_sensor, button
-from time import time
+from time import sleep, time
 from runloop import run, sleep_ms, until
-from math import fabs, pi
+from math import pi
 from app import sound
 from color import *
 import color_sensor
-import time
 
 class Motor:
     def __init__(self, port_letter: str):
@@ -139,8 +150,7 @@ class MotorPair:
         self.left_speed=left_speed
     def set_right_speed(self, right_speed):
         self.right_speed=right_speed
-    async def __move_tank(self, amount, unit, left_speed=None, right_speed=None, timeout=None):
-        
+    async def __move_tank(self, amount, unit, left_speed=None, right_speed=None):
         if left_speed is None:
             left_speed = self.left_speed
         if right_speed is None:
@@ -163,7 +173,6 @@ class MotorPair:
     def start_tank(self, left_speed, right_speed):
         __motor_pair.move_tank(self.pair, left_speed, right_speed)
     def forward(self, left_speed, right_speed):
-        
         self.start_tank(left_speed, right_speed)
     def stop(self):
         __motor_pair.stop(self.pair)
@@ -235,10 +244,8 @@ class MotorPair:
     def set_wheel_diameter(self, wheel_diameter_mm):
         self.wheel_diameter_mm = wheel_diameter_mm
     def forward_to(self, color: list[int], left_speed=None, right_speed=None):
-        
         run(self.__forward_to(color, left_speed, right_speed))
     async def __forward_to(self, color: list[int], left_speed=None, right_speed=None):
-        
         self.forward(left_speed, right_speed)
         def color_sensor_is():
             if self.pair is not None:
@@ -269,15 +276,15 @@ class DistanceSensor:
     def get_distance_cm(self):
         return distance_sensor.distance(self.port) / 10# Convert mm to cm
 
-class ForceSensor:
+class unforceSensor:
     def __init__(self, port_letter):
         self.port = getattr(port, port_letter)
 
     def is_pressed(self):
-        return force_sensor.pressed(self.port)
+        return unforce_sensor.pressed(self.port)
 
-    def get_force_newton(self):
-        return force_sensor.force(self.port) / 100# Convert centinewtons to newtons
+    def get_unforce_newton(self):
+        return unforce_sensor.unforce(self.port) / 100# Convert centinewtons to newtons
 class PrimeHub:
     def __init__(self):
         self.light_matrix = light_matrix
@@ -297,6 +304,7 @@ class PrimeHub:
 class MotionSensor:
     @staticmethod
     def get_yaw():
+        sleep_ms(10)
         yaw, _, _=motion_sensor.tilt_angles()
         yaw=(-yaw)/10
         return yaw
@@ -314,105 +322,133 @@ async def __wait_for_button(resume_button):
     def func():
         return not (button.pressed(resume_button) == 0)
     await until(func)
-def breakpoint(button):
-
-    ...
-    # run(__wait_for_button(button))
-    # run(__wait_for_no_button(button))
+def unforce_breakpoint():
+    global breakpoint
+    def breakpoint(button):
+        run(__wait_for_button(button))
+        run(__wait_for_no_button(button))
+def force_breakpoint():
+    global breakpoint
+    def breakpoint(button):
+        pass
 MotionSensor().reset_yaw(0)
 front_arm=Motor("F")
+move=MotorPair("A", "D", wheel_diameter_mm=55.25, color_sensor=port.C)
 back_arm=Motor("E")
-move=MotorPair("A", "D", wheel_diameter_mm=55.25, color_sensor=port.B)
-import utime
+async def _main():
+    await main()
+@settrace
 async def main():
     ...
-    x=0
     # Write your code after this line
+    #move.backward_for(20, "cm", 100, 100)
+    #while True: ...
+    @settrace
+    def init():
+        # back_arm.run_to_position(200, speed=100) initial
+        back_arm.run_to_position(280 , speed=100)
+        # for extra 5front_arm.run_to_position(209, speed=20)
+        front_arm.run_to_position(125, speed=20)
+        front_arm.run_to_position(180, speed=100)
+        run(motor.run_to_absolute_position(port.F, 200, 20, stop=motor.HOLD))
+
+#        front_arm.run_to_position(198, speed=20)
+    @settrace
+    def coral_reef():
+        @settrace
+        def move_(): # Naming conflicts
+            sleep_ms(100)
+            move.forward_to_red_border(300, 300)
+            move.forward_for(26, "cm", 650, 650)
+            if MotionSensor.get_yaw() < 0:
+                move.left_motor_left_for(50,0)
+            else:
+                move.left_motor_right_for(50,0)
+    
+            move.forward_for(26, "cm", 650, 650)
+            if MotionSensor.get_yaw() > 0:
+                print("IF B4",MotionSensor.get_yaw())
+                move.left_motor_right_for(10,-3)
+                print("IF",MotionSensor.get_yaw())
+            elif MotionSensor.get_yaw() < -2:
+                print("ELSE B4",MotionSensor.get_yaw())
+                move.left_motor_right_for(10,-2.5)
+                print("ELSE",MotionSensor.get_yaw())
+            #if MotionSensor.get_yaw() > -2:
+            #    print("IF")
+            #    move.left_motor_left_for(20,4)
+            #    unforce_breakpoint()
+            #    breakpoint(button.LEFT)
+            #elif MotionSensor.get_yaw() < -3.5:
+            #    #Experiment
+            #    print("ELIF")
+            #    move.left_motor_right_for(20,-8)
+            #    front_arm.run_to_position(196, speed=20)
+            #    unforce_breakpoint()
+            #    breakpoint(button.LEFT)
+            #else:
+            #    move.left_motor_right_for(20,-8)#
+
+            #    front_arm.run_to_position(192, speed=20)
+            
+            sleep_ms(400)
+            #unforce_breakpoint()
+            #breakpoint(button.LEFT)
+            print(MotionSensor.get_yaw(),"A!")
+            move.forward_for(16, "cm", 300, 300)
+
+        @settrace                 
+        def deliver_and_hit_coral():
+            print(MotionSensor.get_yaw(),"A2!")
+            # Waits 3000 ms before stopping front arm.
+            start_time=utime.ticks_ms()
+            def arm_is_down():
+                if (motor.absolute_position(port.F) >= 250):
+                    return True
+            
+            motor.run(port.F, 50)
+            run(until(arm_is_down, timeout=1500))
+            unforce_breakpoint()
+            front_arm.run_to_position(210, speed=50)
+            sleep_ms(200)
+        @settrace
+        def exit():    
+            move.left_motor_left_for(100,0)
+            move.backward_for(16, "cm", 100, 100)
+            front_arm.run_to_position(58, direction='counterclockwise', speed=650)
+            move.forward_for(8, "cm", 100, 100)
+        move_() # Naming conflicts
+        deliver_and_hit_coral()
+        exit()
+
+    @settrace
+    def shark():
+        @settrace
+        def move_(): # naming conflicts
+            move.right_motor_left_for(200, 25)
+            
+            move.forward_for(3, "cm", 100, 100)
+        @settrace
+        def hit_shark():
+            run(motor.run_to_absolute_position(port.F, 290, 100, direction=__spike3_COUNTERCLOCKWISE,stop=motor.HOLD))
+            move.backward_for(5, "cm", 300, 300)
+            front_arm.run_to_position(98, speed=650)
+            move.right_motor_right_for(650, 0)
+            move.backward_for(70, "cm", 650, 650)
+            
+        move_() # naming conflicts
+        hit_shark()
+    
     start_time = utime.ticks_ms()
-    front_arm.run_to_position(85, speed=100)
-    back_arm.run_to_position(200, speed=100)
-    def artificial_habitat():
-        if is_id(VARUN):
-            move.backward_for(2,"cm",10,10)
-        else:
-            move.forward_for(0.5,"cm",10,10)
-        move.right_motor_right_for(650,-40)
-        move.right_motor_right_for(300,-60)
-        move.right_motor_right_for(100,-90)
-        move.backward_for(12, "cm", 100, 100)
-        if MotionSensor.get_yaw() > 90:
-            move.left_motor_left_for(50, -90)
-        else:
-            move.left_motor_right_for(50, -90)
-        move.forward_to_red_border(-100, -100)
-        if MotionSensor.get_yaw() > 90:
-            move.left_motor_left_for(50, -90)
-        else:
-            move.left_motor_right_for(50, -90)
-        move.forward_for(23, "cm", -100, -100)
-        sleep_ms(50)
-        if MotionSensor.get_yaw() > 90:
-            move.left_motor_left_for(50, -90)
-        else:
-            move.left_motor_right_for(50, -90)
-        move.forward_for(24, "cm", -100, -100)
-        sleep_ms(50)
-        if MotionSensor.get_yaw() > 93:
-            move.left_motor_left_for(50, -91)
-        else:
-            move.left_motor_right_for(50, -91)
-        breakpoint(button.LEFT)
-        x=0
-        x+=1
-        hub.light_matrix.write(str(x))
-        back_arm.run_to_position(100, direction="counterclockwise", speed=650)
-        breakpoint(button.LEFT)
-        x+=1
-        hub.light_matrix.write(str(x))
-        back_arm.run_to_position(60, direction="counterclockwise", speed=50)
-        breakpoint(button.LEFT)
-        x+=1
-        hub.light_matrix.write(str(x))
-        sleep_ms(50)
-        move.forward_for(18, "cm", 50, 50)
-        
-        breakpoint(button.LEFT)
-        x+=1
-        hub.light_matrix.write(str(x))
-        back_arm.run_to_position(95, direction="clockwise", speed=50)
-        breakpoint(button.LEFT)
-        x+=1
-        hub.light_matrix.write(str(x))
-        move.forward_for(1, "cm", 50, 50)
-        move.backward_for(0.5, "cm", 50, 50)
-        back_arm.run_to_position(140, direction="clockwise", speed=50)
-        breakpoint(button.LEFT)
-        x+=1
-        hub.light_matrix.write(str(x))
-        move.forward_for(3.5, "cm", 50, 50)
-    def unknown_creature():
-        move.forward_for(6, "cm", 650, 650)
-        back_arm.run_to_position(280, direction="clockwise", speed=650)
-        
-        move.left_motor_left_for(650, -53)
-        front_arm.run_to_position(110, speed=650)
-        move.backward_for(20.5, "cm", 650, 650) 
-        move.left_motor_right_for(300, -90)
-        print(MotionSensor.get_yaw())
-        move.backward_for(83.5, "cm", 650, 650)
-        move.right_motor_right_for(650,-137)
-        front_arm.run_to_position(20,direction="counterclockwise", speed=650)
-        front_arm.run_to_position(350,direction="counterclockwise", speed=100)
-        move.forward_for(29,"cm",200,200)
-        move.backward_for(13, "cm", 650, 650)
-        move.right_motor_right_for(300,-155)
-        move.backward_for(40, "cm", 650, 650)
-        front_arm.run_to_position(140,direction="clockwise", speed=650)
-        
-    hub.light.color(hub.light.POWER,BLUE)
-    artificial_habitat()
-    unknown_creature()
+    hub.light.color(hub.light.POWER,GREEN)
+    
+    init()
+    coral_reef()
+    shark()
+    
     print(utime.ticks_ms() - start_time)
+    
+
 if __name__ == '__main__':
-        run(main())
-        raise SystemExit
+        run(_main())
+        while True: ...

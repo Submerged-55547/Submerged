@@ -317,8 +317,8 @@ async def __wait_for_button(resume_button):
 def breakpoint(button):
 
     ...
-    # run(__wait_for_button(button))
-    # run(__wait_for_no_button(button))
+    run(__wait_for_button(button))
+    run(__wait_for_no_button(button))
 MotionSensor().reset_yaw(0)
 front_arm=Motor("F")
 back_arm=Motor("E")
@@ -326,7 +326,6 @@ move=MotorPair("A", "D", wheel_diameter_mm=55.25, color_sensor=port.B)
 import utime
 async def main():
     ...
-    x=0
     # Write your code after this line
     start_time = utime.ticks_ms()
     front_arm.run_to_position(85, speed=100)
@@ -355,40 +354,21 @@ async def main():
             move.left_motor_left_for(50, -90)
         else:
             move.left_motor_right_for(50, -90)
-        move.forward_for(24, "cm", -100, -100)
+        move.forward_for(26, "cm", -100, -100)
         sleep_ms(50)
         if MotionSensor.get_yaw() > 93:
             move.left_motor_left_for(50, -91)
         else:
             move.left_motor_right_for(50, -91)
-        breakpoint(button.LEFT)
-        x=0
-        x+=1
-        hub.light_matrix.write(str(x))
         back_arm.run_to_position(100, direction="counterclockwise", speed=650)
-        breakpoint(button.LEFT)
-        x+=1
-        hub.light_matrix.write(str(x))
         back_arm.run_to_position(60, direction="counterclockwise", speed=50)
-        breakpoint(button.LEFT)
-        x+=1
-        hub.light_matrix.write(str(x))
         sleep_ms(50)
-        move.forward_for(18, "cm", 50, 50)
+        move.forward_for(17.5, "cm", 50, 50)
         
-        breakpoint(button.LEFT)
-        x+=1
-        hub.light_matrix.write(str(x))
         back_arm.run_to_position(95, direction="clockwise", speed=50)
-        breakpoint(button.LEFT)
-        x+=1
-        hub.light_matrix.write(str(x))
         move.forward_for(1, "cm", 50, 50)
         move.backward_for(0.5, "cm", 50, 50)
         back_arm.run_to_position(140, direction="clockwise", speed=50)
-        breakpoint(button.LEFT)
-        x+=1
-        hub.light_matrix.write(str(x))
         move.forward_for(3.5, "cm", 50, 50)
     def unknown_creature():
         move.forward_for(6, "cm", 650, 650)
@@ -409,7 +389,7 @@ async def main():
         move.backward_for(40, "cm", 650, 650)
         front_arm.run_to_position(140,direction="clockwise", speed=650)
         
-    hub.light.color(hub.light.POWER,BLUE)
+    hub.light.color(hub.light.POWER,GREEN)
     artificial_habitat()
     unknown_creature()
     print(utime.ticks_ms() - start_time)

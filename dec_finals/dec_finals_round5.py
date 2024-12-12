@@ -343,7 +343,7 @@ async def main():
         move.right_motor_left_for(30, 10)
         run(motor.run_to_absolute_position(port.F, 335, 100, direction=__spike3_COUNTERCLOCKWISE,stop=HOLD))#,stop=HOLD)
         move.backward_for(19, "cm", 100, 100)
-        move.forward_for(2, "cm", 100, 100)
+        move.forward_for(1, "cm", 100, 100)
         front_arm.run_to_position(79, speed=100)
     def angler():
         move.right_motor_left_for(300, 75)
@@ -366,6 +366,7 @@ async def main():
 
         #ram in
         move.left_motor_right_for(100, 85)
+        sleep_ms(100)
         move.forward_for(6,"cm",100,100)
         move.backward_for(3,"cm",100,100)
         move.left_motor_left_for(100, 45)

@@ -145,20 +145,7 @@ class MotorPair:
             left_speed = self.left_speed
         if right_speed is None:
             right_speed = self.right_speed
-        if unit == 'cm':
-            amount = self.__cm_to_degrees(amount, self.wheel_diameter_mm)# Convert cm to degrees
-        elif unit == 'degrees':
-            pass# Already in degrees, no conversion needed
-        elif unit == 'in':
-            amount = self.__cm_to_degrees(self.__in_to_cm(amount), self.wheel_diameter_mm)# Convert inches to cm then to degrees
-        elif unit == 'rotations':
-            amount *= 360# Convert rotations to degrees
-        elif unit == 'seconds':
-            # Handle seconds separately for timed movement
-            await __motor_pair.move_tank_for_time(self.pair, left_speed * 11, right_speed * 11, amount * 1000)
-            return# Exit the function after handling time
-        else:
-            raise ValueError("Unit must be 'cm', 'degrees', 'in', 'rotations', or 'seconds'.")
+        amount = self.__cm_to_degrees(amount, self.wheel_diameter_mm)# Convert cm to degrees
         await __motor_pair.move_tank_for_degrees(self.pair, amount, left_speed*11, right_speed*11)
     def start_tank(self, left_speed, right_speed):
         __motor_pair.move_tank(self.pair, left_speed, right_speed)
@@ -317,8 +304,8 @@ async def __wait_for_button(resume_button):
 def breakpoint(button):
 
     ...
-    # run(__wait_for_button(button))
-    # run(__wait_for_no_button(button))
+    run(__wait_for_button(button))
+    run(__wait_for_no_button(button))
 MotionSensor().reset_yaw(0)
 front_arm=Motor("F")
 back_arm=Motor("E")
@@ -326,14 +313,14 @@ move=MotorPair("A", "D", wheel_diameter_mm=55.25, color_sensor=port.B)
 import utime
 async def main():
     ...
-    x=0
+
     # Write your code after this line
     start_time = utime.ticks_ms()
     front_arm.run_to_position(85, speed=100)
     back_arm.run_to_position(200, speed=100)
     def artificial_habitat():
         if is_id(VARUN):
-            move.backward_for(2,"cm",10,10)
+            move.backward_for(1,"cm",10,10)
         else:
             move.forward_for(0.5,"cm",10,10)
         move.right_motor_right_for(650,-40)
@@ -349,6 +336,7 @@ async def main():
             move.left_motor_left_for(50, -90)
         else:
             move.left_motor_right_for(50, -90)
+
         move.forward_for(23, "cm", -100, -100)
         sleep_ms(50)
         if MotionSensor.get_yaw() > 90:
@@ -358,58 +346,37 @@ async def main():
         move.forward_for(24, "cm", -100, -100)
         sleep_ms(50)
         if MotionSensor.get_yaw() > 93:
-            move.left_motor_left_for(50, -91)
+            move.left_motor_left_for(50, -93)
         else:
-            move.left_motor_right_for(50, -91)
-        breakpoint(button.LEFT)
-        x=0
-        x+=1
-        hub.light_matrix.write(str(x))
+            move.left_motor_right_for(50, -93)
         back_arm.run_to_position(100, direction="counterclockwise", speed=650)
-        breakpoint(button.LEFT)
-        x+=1
-        hub.light_matrix.write(str(x))
         back_arm.run_to_position(60, direction="counterclockwise", speed=50)
-        breakpoint(button.LEFT)
-        x+=1
-        hub.light_matrix.write(str(x))
         sleep_ms(50)
         move.forward_for(18, "cm", 50, 50)
         
-        breakpoint(button.LEFT)
-        x+=1
-        hub.light_matrix.write(str(x))
         back_arm.run_to_position(95, direction="clockwise", speed=50)
-        breakpoint(button.LEFT)
-        x+=1
-        hub.light_matrix.write(str(x))
         move.forward_for(1, "cm", 50, 50)
-        move.backward_for(0.5, "cm", 50, 50)
         back_arm.run_to_position(140, direction="clockwise", speed=50)
-        breakpoint(button.LEFT)
-        x+=1
-        hub.light_matrix.write(str(x))
-        move.forward_for(3.5, "cm", 50, 50)
+        move.forward_for(3, "cm", 50, 50)
     def unknown_creature():
         move.forward_for(6, "cm", 650, 650)
         back_arm.run_to_position(280, direction="clockwise", speed=650)
-        
+
         move.left_motor_left_for(650, -53)
         front_arm.run_to_position(110, speed=650)
         move.backward_for(20.5, "cm", 650, 650) 
-        move.left_motor_right_for(300, -90)
-        print(MotionSensor.get_yaw())
+        move.left_motor_right_for(650, -90)
         move.backward_for(83.5, "cm", 650, 650)
         move.right_motor_right_for(650,-137)
         front_arm.run_to_position(20,direction="counterclockwise", speed=650)
         front_arm.run_to_position(350,direction="counterclockwise", speed=100)
-        move.forward_for(29,"cm",200,200)
+        move.forward_for(31,"cm",200,200)
         move.backward_for(13, "cm", 650, 650)
         move.right_motor_right_for(300,-155)
         move.backward_for(40, "cm", 650, 650)
         front_arm.run_to_position(140,direction="clockwise", speed=650)
-        
-    hub.light.color(hub.light.POWER,BLUE)
+
+    hub.light.color(hub.light.POWER,GREEN)
     artificial_habitat()
     unknown_creature()
     print(utime.ticks_ms() - start_time)

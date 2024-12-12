@@ -45,7 +45,7 @@ void onBeatDetected()
 void setup()
 {
     Serial.begin(115200);
-    lcd.begin(16, 3);
+    lcd.begin(16, 2);
 
     // Initialize the PulseOximeter instance and register a beat-detected callback
     // The parameter passed to the begin() method changes the samples flow that

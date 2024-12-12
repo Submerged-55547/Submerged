@@ -315,7 +315,6 @@ async def __wait_for_button(resume_button):
         return not (button.pressed(resume_button) == 0)
     await until(func)
 def breakpoint(button):
-
     ...
     # run(__wait_for_button(button))
     # run(__wait_for_no_button(button))
@@ -333,18 +332,15 @@ async def main():
     back_arm.run_to_position(200, speed=100)
     def artificial_habitat():
         if is_id(VARUN):
-            move.backward_for(2,"cm",10,10)
+            move.backward_for(22,"cm",200,200)
         else:
             move.forward_for(0.5,"cm",10,10)
+        breakpoint(button.LEFT)
         move.right_motor_right_for(650,-40)
         move.right_motor_right_for(300,-60)
         move.right_motor_right_for(100,-90)
-        move.backward_for(12, "cm", 100, 100)
-        if MotionSensor.get_yaw() > 90:
-            move.left_motor_left_for(50, -90)
-        else:
-            move.left_motor_right_for(50, -90)
-        move.forward_to_red_border(-100, -100)
+        
+        #move.backward_for(12, "cm", 100, 100)
         if MotionSensor.get_yaw() > 90:
             move.left_motor_left_for(50, -90)
         else:
@@ -356,50 +352,14 @@ async def main():
         else:
             move.left_motor_right_for(50, -90)
         move.forward_for(24, "cm", -100, -100)
-        sleep_ms(50)
-        if MotionSensor.get_yaw() > 93:
-            move.left_motor_left_for(50, -91)
+        if MotionSensor.get_yaw() > 90:
+            move.left_motor_left_for(50, -90)
         else:
-            move.left_motor_right_for(50, -91)
-        breakpoint(button.LEFT)
-        x=0
-        x+=1
-        hub.light_matrix.write(str(x))
-        back_arm.run_to_position(100, direction="counterclockwise", speed=650)
-        breakpoint(button.LEFT)
-        x+=1
-        hub.light_matrix.write(str(x))
-        back_arm.run_to_position(60, direction="counterclockwise", speed=50)
-        breakpoint(button.LEFT)
-        x+=1
-        hub.light_matrix.write(str(x))
+            move.left_motor_right_for(50, -90)
+        move.forward_for(24, "cm", -100, -100)
         sleep_ms(50)
-        move.forward_for(18, "cm", 50, 50)
-        
-        breakpoint(button.LEFT)
-        x+=1
-        hub.light_matrix.write(str(x))
-        back_arm.run_to_position(95, direction="clockwise", speed=50)
-        breakpoint(button.LEFT)
-        x+=1
-        hub.light_matrix.write(str(x))
-        move.forward_for(1, "cm", 50, 50)
-        move.backward_for(0.5, "cm", 50, 50)
-        back_arm.run_to_position(140, direction="clockwise", speed=50)
-        breakpoint(button.LEFT)
-        x+=1
-        hub.light_matrix.write(str(x))
-        move.forward_for(3.5, "cm", 50, 50)
     def unknown_creature():
-        move.forward_for(6, "cm", 650, 650)
-        back_arm.run_to_position(280, direction="clockwise", speed=650)
-        
-        move.left_motor_left_for(650, -53)
-        front_arm.run_to_position(110, speed=650)
-        move.backward_for(20.5, "cm", 650, 650) 
-        move.left_motor_right_for(300, -90)
-        print(MotionSensor.get_yaw())
-        move.backward_for(83.5, "cm", 650, 650)
+        move.backward_for(56, "cm", 650, 650)
         move.right_motor_right_for(650,-137)
         front_arm.run_to_position(20,direction="counterclockwise", speed=650)
         front_arm.run_to_position(350,direction="counterclockwise", speed=100)
