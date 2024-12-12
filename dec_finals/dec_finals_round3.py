@@ -359,9 +359,9 @@ async def main():
             move.forward_to_red_border(300, 300)
             move.forward_for(26, "cm", 650, 650)
             if MotionSensor.get_yaw() < 0:
-                move.left_motor_left_for(50,0)
+                move.left_motor_left_for(100,0)
             else:
-                move.left_motor_right_for(50,0)
+                move.left_motor_right_for(100,0)
     
             move.forward_for(26, "cm", 650, 650)
             if MotionSensor.get_yaw() > 0:
@@ -403,7 +403,7 @@ async def main():
                 if (motor.absolute_position(port.F) >= 250):
                     return True
             
-            motor.run(port.F, 50)
+            motor.run(port.F, 70)
             run(until(arm_is_down, timeout=1500))
             unforce_breakpoint()
             front_arm.run_to_position(210, speed=50)
@@ -413,7 +413,7 @@ async def main():
             move.left_motor_left_for(100,0)
             move.backward_for(16, "cm", 100, 100)
             front_arm.run_to_position(58, direction='counterclockwise', speed=650)
-            move.forward_for(10, "cm", 100, 100)
+            move.forward_for(10, "cm", 200, 200)
         move_() # Naming conflicts
         deliver_and_hit_coral()
         exit()
@@ -424,13 +424,13 @@ async def main():
         def move_(): # naming conflicts
             move.right_motor_left_for(200, 25)
             
-            move.forward_for(3, "cm", 100, 100)
+            move.forward_for(3, "cm", 200, 200)
         @settrace
         def hit_shark():
             run(motor.run_to_absolute_position(port.F, 290, 100, direction=__spike3_COUNTERCLOCKWISE,stop=motor.HOLD))
             move.backward_for(5, "cm", 300, 300)
             front_arm.run_to_position(98, speed=650)
-            move.right_motor_right_for(650, 0)
+            move.right_motor_right_for(650, -10)
             move.backward_for(70, "cm", 650, 650)
             
         move_() # naming conflicts

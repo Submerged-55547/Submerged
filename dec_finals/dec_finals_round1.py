@@ -323,7 +323,7 @@ async def main():
         
 
         #position for scuba
-        move.right_motor_left_for(300, 38)
+        move.right_motor_left_for(650, 38)
         ##Vihaan=58. Varun=56
         if is_id(VARUN):
             move.right_motor_left_for(50, 56)
@@ -334,7 +334,7 @@ async def main():
         sleep_ms(50)
         #print("calling 330")
 
-        run(__motor_pair.move_tank_for_degrees(__motor_pair.PAIR_1, 290,-110,-110))
+        run(__motor_pair.move_tank_for_degrees(__motor_pair.PAIR_1, 290,-220,-220))
         #move.backward_for(14,"cm", 10,10)
         sleep_ms(50)
         #get the guy
@@ -353,7 +353,7 @@ async def main():
     def go_home():
         
         run(__motor_pair.move_tank_for_degrees(__motor_pair.PAIR_1, 207,7150,7150))#move.forward_for(10, "cm",650, 650)
-        move.left_motor_left_for(300, 110)
+        move.left_motor_left_for(650, 110)
         move.left_motor_left_for(300, 136)
         
         #print("calling 355")
@@ -372,9 +372,10 @@ async def main():
     ensure_coral_reef()
     go_home()
     front_arm.run_to_position(95, speed=650)
+    print(utime.ticks_ms() - start_time)
+    breakpoint(button.LEFT)
     back_arm.run_to_position(300, speed=650)
 
-    print(utime.ticks_ms() - start_time)
 if __name__ == '__main__':
     run(main())
     raise SystemExit()

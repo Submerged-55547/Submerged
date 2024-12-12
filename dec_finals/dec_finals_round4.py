@@ -316,9 +316,8 @@ async def __wait_for_button(resume_button):
     await until(func)
 def breakpoint(button):
 
-    ...
-    # run(__wait_for_button(button))
-    # run(__wait_for_no_button(button))
+    run(__wait_for_button(button))
+    run(__wait_for_no_button(button))
 MotionSensor().reset_yaw(0)
 front_arm=Motor("F")
 back_arm=Motor("E")
@@ -361,34 +360,16 @@ async def main():
             move.left_motor_left_for(50, -91)
         else:
             move.left_motor_right_for(50, -91)
-        breakpoint(button.LEFT)
-        x=0
-        x+=1
-        hub.light_matrix.write(str(x))
         back_arm.run_to_position(100, direction="counterclockwise", speed=650)
-        breakpoint(button.LEFT)
-        x+=1
-        hub.light_matrix.write(str(x))
         back_arm.run_to_position(60, direction="counterclockwise", speed=50)
-        breakpoint(button.LEFT)
-        x+=1
-        hub.light_matrix.write(str(x))
         sleep_ms(50)
         move.forward_for(18, "cm", 50, 50)
         
-        breakpoint(button.LEFT)
-        x+=1
-        hub.light_matrix.write(str(x))
         back_arm.run_to_position(95, direction="clockwise", speed=50)
         breakpoint(button.LEFT)
-        x+=1
-        hub.light_matrix.write(str(x))
-        move.forward_for(1, "cm", 50, 50)
         move.backward_for(0.5, "cm", 50, 50)
-        back_arm.run_to_position(140, direction="clockwise", speed=50)
-        breakpoint(button.LEFT)
-        x+=1
-        hub.light_matrix.write(str(x))
+        run(motor.run_to_absolute_position(port.E, 150, 50, direction=motor.SHORTEST_PATH, stop=motor.HOLD))
+
         move.forward_for(3.5, "cm", 50, 50)
     def unknown_creature():
         move.forward_for(6, "cm", 650, 650)
@@ -397,7 +378,7 @@ async def main():
         move.left_motor_left_for(650, -53)
         front_arm.run_to_position(110, speed=650)
         move.backward_for(20.5, "cm", 650, 650) 
-        move.left_motor_right_for(300, -90)
+        move.left_motor_right_for(650, -90)
         print(MotionSensor.get_yaw())
         move.backward_for(83.5, "cm", 650, 650)
         move.right_motor_right_for(650,-137)

@@ -326,37 +326,40 @@ async def main():
         move.forward_for(30, "cm", 650, 650)
         if MotionSensor.get_yaw() > 0:
             print("IF ", MotionSensor.get_yaw())
-            move.left_motor_right_for(50, 0)
+            move.left_motor_right_for(100, 0)
         else:
             print("ELSE ", MotionSensor.get_yaw())
-            move.left_motor_left_for(50, 0)
+            move.left_motor_left_for(100, 0)
         move.forward_for(30, "cm", 650,650)
         if MotionSensor.get_yaw() > 0:
             print("IF ", MotionSensor.get_yaw())
-            move.left_motor_right_for(50, 0)
+            move.left_motor_right_for(100, 0)
         else:
             print("ELSE ", MotionSensor.get_yaw())
-            move.left_motor_left_for(50, 0)
+            move.left_motor_left_for(100, 0)
 
         move.forward_for(14, "cm",650, 650)
         # turn a bit for circular
-        move.right_motor_left_for(30, 10)
-        run(motor.run_to_absolute_position(port.F, 335, 100, direction=__spike3_COUNTERCLOCKWISE,stop=HOLD))#,stop=HOLD)
-        move.backward_for(19, "cm", 100, 100)
-        move.forward_for(1, "cm", 100, 100)
-        front_arm.run_to_position(79, speed=100)
+        move.right_motor_left_for(30, 12)
+        print("HERE",MotionSensor.get_yaw())
+        sleep_ms(50)
+        run(motor.run_to_absolute_position(port.F, 335, 200, direction=__spike3_COUNTERCLOCKWISE,stop=HOLD))#,stop=HOLD)
+        sleep_ms(50)
+        move.backward_for(21, "cm", 200, 200)
+        move.forward_for(2, "cm", 200, 200)
+        front_arm.run_to_position(79, speed=200)
     def angler():
-        move.right_motor_left_for(300, 75)
-        move.right_motor_left_for(20, 90)
+        move.right_motor_left_for(650, 75)
+        move.right_motor_left_for(50, 90)
         move.forward_for(21.5, "cm", 650, 650)
         if MotionSensor.get_yaw() > 0:
             print("IF ", MotionSensor.get_yaw())
-            move.left_motor_right_for(50, 0)
+            move.left_motor_right_for(100, 0)
         else:
             print("ELSE ", MotionSensor.get_yaw())
-            move.left_motor_left_for(50, 0)
+            move.left_motor_left_for(100, 0)
         move.forward_for(21.5, "cm", 650, 650)
-        run(motor.run_to_absolute_position(port.F, 20, 100, direction=__spike3_COUNTERCLOCKWISE))#,stop=HOLD)
+        run(motor.run_to_absolute_position(port.F, 20, 650, direction=__spike3_COUNTERCLOCKWISE))#,stop=HOLD)
     
         move.forward_for(5,"cm",650,650)
         run(motor.run_to_absolute_position(port.F, 320, 100, direction=__spike3_COUNTERCLOCKWISE))#,stop=HOLD)
@@ -366,27 +369,27 @@ async def main():
 
         #ram in
         move.left_motor_right_for(100, 85)
-        sleep_ms(100)
-        move.forward_for(6,"cm",100,100)
-        move.backward_for(3,"cm",100,100)
-        move.left_motor_left_for(100, 45)
-        move.forward_for(10,"cm",100,100)
-        move.backward_for(4,"cm",100,100)
+        sleep_ms(50)
+        move.forward_for(6,"cm",200,200)
+        move.backward_for(5,"cm",200,200)
+        move.left_motor_right_for(100, 90)
+        move.forward_for(8,"cm",100,100)
+        move.backward_for(6,"cm",100,100)
     def submersible():
-        front_arm.run_to_position(20, direction="clockwise", speed=100)
-
-        move.backward_for(14,"cm",100,100)
+        front_arm.run_to_position(20, direction="clockwise", speed=650)
+        breakpoint(button.LEFT)
+        move.backward_for(14,"cm",300,300)
         move.right_motor_right_for(100, 60)
-        front_arm.run_to_position(214, direction="clockwise", speed=100)
-        move.forward_to([BLACK],100,100)
+        front_arm.run_to_position(214, direction="clockwise", speed=650)
+        move.forward_to([BLACK],200,200)
         move.forward_for(3,"cm",100,100)
 
     
         front_arm.run_to_position(170, speed=100)
     def unknown_drop():
-        front_arm.run_to_position(214, direction="clockwise", speed=100)
-        move.right_motor_right_for(100, 0)
-        move.backward_for(10,"cm",100,100)
+        front_arm.run_to_position(214, direction="clockwise", speed=200)
+        move.right_motor_right_for(300, 0)
+        move.backward_for(8,"cm",300,300)
     
     circular()
     angler()
