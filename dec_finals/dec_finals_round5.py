@@ -319,10 +319,19 @@ async def main():
 
     start_time=utime.ticks_ms()
     # Write your code after this line
-    def circular():
+    def init():
         front_arm.run_to_position(93, speed=100)
         run(sleep_ms(20))
-        move.forward_to_blue_border(100, 100)
+    def angler():
+        move.right_motor_left_for(650, 30)
+        move.right_motor_left_for(100, 55)
+        move.forward_for(30, "cm", 650, 650)
+        if MotionSensor.get_yaw() > 55:
+            print("IF ", MotionSensor.get_yaw())
+            move.left_motor_right_for(100, 55)
+        else:
+            print("ELSE ", MotionSensor.get_yaw())
+            move.left_motor_left_for(100, 55)
         move.forward_for(30, "cm", 650, 650)
         if MotionSensor.get_yaw() > 0:
             print("IF ", MotionSensor.get_yaw())
@@ -331,25 +340,12 @@ async def main():
             print("ELSE ", MotionSensor.get_yaw())
             move.left_motor_left_for(100, 0)
         move.forward_for(30, "cm", 650,650)
-        if MotionSensor.get_yaw() > 0:
-            print("IF ", MotionSensor.get_yaw())
-            move.left_motor_right_for(100, 0)
-        else:
-            print("ELSE ", MotionSensor.get_yaw())
-            move.left_motor_left_for(100, 0)
+        move.right_motor_right_for(100, 75)
+        move.backward_for(10, "cm", 650,650)
+        move.right_motor_right_for(100, 0)
+        move.forward_to([BLACK],200,200)
 
-        move.forward_for(14, "cm",650, 650)
-        # turn a bit for circular
-        move.right_motor_left_for(30, 12)
-        print("HERE",MotionSensor.get_yaw())
-        sleep_ms(50)
-        run(motor.run_to_absolute_position(port.F, 335, 200, direction=__spike3_COUNTERCLOCKWISE,stop=HOLD))#,stop=HOLD)
-        sleep_ms(50)
-        move.backward_for(21, "cm", 200, 200)
-        move.forward_for(2, "cm", 200, 200)
-        front_arm.run_to_position(79, speed=200)
-    def angler():
-        move.right_motor_left_for(650, 75)
+        breakpoint(button.LEFT)
         move.right_motor_left_for(50, 90)
         move.forward_for(21.5, "cm", 650, 650)
         if MotionSensor.get_yaw() > 0:
@@ -391,7 +387,7 @@ async def main():
         move.right_motor_right_for(300, 0)
         move.backward_for(8,"cm",300,300)
     
-    circular()
+    init()
     angler()
     submersible()
     unknown_drop()
