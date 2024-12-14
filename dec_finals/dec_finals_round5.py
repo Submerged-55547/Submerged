@@ -314,86 +314,75 @@ back_arm=Motor("E")
 move=MotorPair("A", "D", wheel_diameter_mm=55.25, color_sensor=port.B)
 import utime
 async def main():
+    back_arm.run_to_position(60, speed=100, direction="counterclockwise")
+
     ...
     hub.light.color(hub.light.POWER,PURPLE)
 
     start_time=utime.ticks_ms()
     # Write your code after this line
-    def circular():
-        front_arm.run_to_position(93, speed=100)
-        run(sleep_ms(20))
-        move.forward_to_blue_border(100, 100)
-        move.forward_for(30, "cm", 650, 650)
-        if MotionSensor.get_yaw() > 0:
-            print("IF ", MotionSensor.get_yaw())
-            move.left_motor_right_for(50, 0)
-        else:
-            print("ELSE ", MotionSensor.get_yaw())
-            move.left_motor_left_for(50, 0)
-        move.forward_for(30, "cm", 650,650)
-        if MotionSensor.get_yaw() > 0:
-            print("IF ", MotionSensor.get_yaw())
-            move.left_motor_right_for(50, 0)
-        else:
-            print("ELSE ", MotionSensor.get_yaw())
-            move.left_motor_left_for(50, 0)
-
-        move.forward_for(14, "cm",650, 650)
-        # turn a bit for circular
-        move.right_motor_left_for(30, 10)
-        run(motor.run_to_absolute_position(port.F, 335, 100, direction=__spike3_COUNTERCLOCKWISE,stop=HOLD))#,stop=HOLD)
-        move.backward_for(19, "cm", 100, 100)
-        move.forward_for(1, "cm", 100, 100)
-        front_arm.run_to_position(79, speed=100)
-    def angler():
-        move.right_motor_left_for(300, 75)
-        move.right_motor_left_for(20, 90)
-        move.forward_for(21.5, "cm", 650, 650)
-        if MotionSensor.get_yaw() > 0:
-            print("IF ", MotionSensor.get_yaw())
-            move.left_motor_right_for(50, 0)
-        else:
-            print("ELSE ", MotionSensor.get_yaw())
-            move.left_motor_left_for(50, 0)
-        move.forward_for(21.5, "cm", 650, 650)
-        run(motor.run_to_absolute_position(port.F, 20, 100, direction=__spike3_COUNTERCLOCKWISE))#,stop=HOLD)
+    front_arm.run_to_position(93, speed=100)
+    back_arm.run_to_position(270, speed=100)
+    run(sleep_ms(20))
+    move.right_motor_left_for(650, 30)
+    x=0
+    move.right_motor_left_for(100, 55)
+    move.forward_for(30, "cm", 650, 650)
+    if MotionSensor.get_yaw() > 55:
+        print("IF ", MotionSensor.get_yaw())
+        move.left_motor_right_for(100, 55)
+    else:
+        print("ELSE ", MotionSensor.get_yaw())
+    move.left_motor_left_for(100, 55)
+    breakpoint(button.LEFT)
+    move.forward_for(32, "cm", 650, 650)
+    move.backward_for(2, "cm", 650, 650)
+    breakpoint(button.LEFT)
+    if MotionSensor.get_yaw() > 0:
+        print("IF ", MotionSensor.get_yaw())
+        move.left_motor_right_for(100, 0)
+    else:
+        print("ELSE ", MotionSensor.get_yaw())
+        move.left_motor_left_for(100, 0)
     
-        move.forward_for(5,"cm",650,650)
-        run(motor.run_to_absolute_position(port.F, 320, 100, direction=__spike3_COUNTERCLOCKWISE))#,stop=HOLD)
-        move.left_motor_right_for(100, 95)
-    
-        move.forward_for(5,"cm",650,650)
-
-        #ram in
-        move.left_motor_right_for(100, 85)
-        sleep_ms(100)
-        move.forward_for(6,"cm",200,200)
-        move.backward_for(5,"cm",200,200)
-        move.left_motor_right_for(100, 90)
-        move.forward_for(8,"cm",100,100)
-        move.backward_for(6,"cm",100,100)
-    def submersible():
-        front_arm.run_to_position(20, direction="clockwise", speed=100)
-
-        move.backward_for(14,"cm",100,100)
-        move.right_motor_right_for(100, 60)
-        front_arm.run_to_position(210, direction="clockwise", speed=100)
-        move.forward_to([BLACK],100,100)
-        move.forward_for(3,"cm",100,100)
-
-    
-        front_arm.run_to_position(160, speed=100)
-    def unknown_drop():
-        front_arm.run_to_position(214, direction="clockwise", speed=100)
-        move.right_motor_right_for(100, 0)
-        move.backward_for(14,"cm",100,100)
-    
-    circular()
-    angler()
-    submersible()
-    unknown_drop()
-    print(utime.ticks_ms() - start_time)
+    move.forward_for(32, "cm", 650,650)
+    breakpoint(button.LEFT)
+    move.right_motor_right_for(100, 75)
+    move.backward_for(12, "cm", 650,650)
+    move.right_motor_right_for(100, 0)
+    move.forward_to([BLACK],200,200)
+    front_arm.run_to_position(213, speed=650)
+    move.left_motor_left_for(100, 35)
+    move.forward_for(6, "cm", 650, 650)
+    front_arm.run_to_position(140, speed=650)
+    front_arm.run_to_position(213, speed=650)
+    move.backward_for(4, "cm", 650, 650)
+    front_arm.run_to_position(69, speed=650)
+    move.right_motor_left_for(650, 90)
+    move.right_motor_left_for(50, 110)
+    diff =utime.ticks_ms() - start_time 
+    start_time = utime.ticks_ms()
+    back_arm.run_to_position(160, speed=650, direction="counterclockwise")
+    diff += utime.ticks_ms() - start_time
+    breakpoint(button.LEFT)
+    start_time = utime.ticks_ms()
+    move.backward_for(27, "cm", 650, 650)
+    if MotionSensor.get_yaw() <110:
+        move.right_motor_right_for(50, 110)
+    else:
+        move.right_motor_left_for(50, 110)
+    diff += utime.ticks_ms() - start_time
+    breakpoint(button.LEFT)
+    start_time = utime.ticks_ms()
+    back_arm.run_to_position(60, speed=100, direction="counterclockwise")
+    diff += utime.ticks_ms() - start_time
+    breakpoint(button.LEFT)
+    start_time = utime.ticks_ms()
+    move.left_motor_right_for(650, 84)
+    diff += utime.ticks_ms() - start_time
+    print(diff)
     
 if __name__ == '__main__':
     run(main())
-    raise SystemExit
+    ...
+    #raise SystemExit
