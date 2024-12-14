@@ -448,4 +448,4 @@ async def main():
 
 if __name__ == '__main__':
         run(_main())
-        while True: ...
+        SystemExit()

@@ -367,26 +367,26 @@ async def main():
         #ram in
         move.left_motor_right_for(100, 85)
         sleep_ms(100)
-        move.forward_for(6,"cm",100,100)
-        move.backward_for(3,"cm",100,100)
-        move.left_motor_left_for(100, 45)
-        move.forward_for(10,"cm",100,100)
-        move.backward_for(4,"cm",100,100)
+        move.forward_for(6,"cm",200,200)
+        move.backward_for(5,"cm",200,200)
+        move.left_motor_right_for(100, 90)
+        move.forward_for(8,"cm",100,100)
+        move.backward_for(6,"cm",100,100)
     def submersible():
         front_arm.run_to_position(20, direction="clockwise", speed=100)
 
         move.backward_for(14,"cm",100,100)
         move.right_motor_right_for(100, 60)
-        front_arm.run_to_position(214, direction="clockwise", speed=100)
+        front_arm.run_to_position(210, direction="clockwise", speed=100)
         move.forward_to([BLACK],100,100)
         move.forward_for(3,"cm",100,100)
 
     
-        front_arm.run_to_position(170, speed=100)
+        front_arm.run_to_position(160, speed=100)
     def unknown_drop():
         front_arm.run_to_position(214, direction="clockwise", speed=100)
         move.right_motor_right_for(100, 0)
-        move.backward_for(10,"cm",100,100)
+        move.backward_for(14,"cm",100,100)
     
     circular()
     angler()
